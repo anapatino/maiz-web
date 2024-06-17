@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'made-tommy-light';
+  src: url('/fonts/MADETOMMYLight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'made-tommy-bold';
+  src: url('/fonts/MADETOMMYBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'another-shabby';
+  src: url('/fonts/Anothershabby_trial.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'champagne';
+  src: url('/fonts/Champagne.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'champagne-bold';
+  src: url('/fonts/ChampagneBold.ttf') format('truetype');
+}
+
+h1 {
+  font-family: 'made-tommy-bold' !important;
+}
+
+h2,
+a,
+p,
+label,
+li {
+  font-family: 'champagne' !important;
+}
+
+h3 {
+  font-family: 'another-shabby' !important;
+}
+
+h4 {
+  font-family: 'made-tommy-light' !important;
+}
+
+
+input {
+  font-family: 'made-tommy-light';
+}
+
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148, 148, 148) rgba(255, 255, 255, 0);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(148, 148, 148);
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0);
+}
+
+@media only screen and (max-width: 640px) {
+  h1 {
+    font-size: 30px !important;
+  }
+
+  h2,
+  h3 {
+    font-size: 22px !important;
+  }
+
+  p {
+    font-size: 20px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 20px !important;
+  }
+}
+
+.svg-color {
+  filter: invert(50%) sepia(91%) saturate(1277%) hue-rotate(16deg) brightness(107%) contrast(99%);
+}
+
+.custom-arrow {
+  font-size: 36px !important;
+}
+
+.search-bar input[type="text"] {
+  font-family: 'made-tommy-light';
+}
+
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+  color: rgba(255, 255, 255);
+}
+
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked,
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+  color: rgba(255, 255, 255);
+}
+
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+  color: rgb(255, 255, 255);
+  margin-left: 28px;
+}
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.MuiTable-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableCell-body {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableCell-footer {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableCell-head {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableCell-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableContainer-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableFooter-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableHead-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTablePagination-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableRow-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableSortLabel-root {
+  background-color: '#1E1E1E';
+}
+
+.MuiTableContainer-root {
+  background-color: '#1E1E1E';
+}
+
+.truncate-multiline {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Cambia el número 2 por la cantidad de líneas que quieras mostrar antes del truncado */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
