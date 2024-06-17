@@ -271,6 +271,8 @@ export default function Category() {
     error: false,
     warning: false,
   });
+  const [isClient, setIsClient] = useState(false);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -366,64 +368,77 @@ export default function Category() {
   };
 
   React.useEffect(() => {
+    setIsClient(true);
+    const hasUserEmail = () => {
+      return localStorage.getItem("user_email") !== null;
+    };
+
     if (!hasUserEmail()) {
       router.push("/login");
     } else {
       fetchCategories();
     }
-  }, []);
+  }, [router]);
 
-  return hasUserEmail() ? (
+  if (!isClient) {
+    return (
+      <main className="flex min-h-screen w-full bg-black text-white"></main>
+    );
+  }
+
+  return (
     <main className="flex min-h-screen w-full bg-black text-white p-5">
-      <Box sx={{ width: "80%" }}>
-        <Paper
-          sx={{
-            width: "100%",
-            mb: 2,
-            bgcolor: "#1E1E1E",
-            borderRadius: "20px",
-            color: "#ffffff",
-          }}
-        >
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            refreshTable={refreshTable}
-          />
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={dense ? "small" : "medium"}
-              bgcolor={"#1E1E1E"}
-              className="text-white"
+      {isClient && localStorage.getItem("user_email") !== null && (
+        <>
+          <Box sx={{ width: "80%" }}>
+            <Paper
+              sx={{
+                width: "100%",
+                mb: 2,
+                bgcolor: "#1E1E1E",
+                borderRadius: "20px",
+                color: "#ffffff",
+              }}
             >
-              <EnhancedTableHead
+              <EnhancedTableToolbar
                 numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                refreshTable={refreshTable}
               />
-              <TableBody>
-                {visibleRows.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size={dense ? "small" : "medium"}
+                  bgcolor={"#1E1E1E"}
+                  className="text-white"
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={rows.length}
+                  />
+                  <TableBody>
+                    {visibleRows.map((row, index) => {
+                      const isItemSelected = isSelected(row.id);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                      style={{ height: "40px" }}
-                    >
-                      <TableCell padding="checkbox">
-                        {/*
+                      return (
+                        <TableRow
+                          hover
+                          onClick={(event) => handleClick(event, row.id)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={row.id}
+                          selected={isItemSelected}
+                          sx={{ cursor: "pointer" }}
+                          style={{ height: "40px" }}
+                        >
+                          <TableCell padding="checkbox">
+                            {/*
                           <Checkbox
                           className="text-white"
                           color="primary"
@@ -433,165 +448,176 @@ export default function Category() {
                           }}
                         />
                          */}
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        className="text-white text-[15px]"
-                      >
-                        <h4 className="text-white text-[15px]">{row.name}</h4>
-                      </TableCell>
-                      <TableCell
-                        align="left"
-                        className="text-white text-left text-[15px] "
-                      >
-                        <div className="flex flex-col justify-start items-start">
-                          {row.options.map((option, index) => (
-                            <h4 key={index} className="text-white text-[13px]">
-                              {option.label}
+                          </TableCell>
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
+                            className="text-white text-[15px]"
+                          >
+                            <h4 className="text-white text-[15px]">
+                              {row.name}
                             </h4>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className="text-white text-left">
-                        <div className="h-[25px] w-[25px] relative overflow-hidden ">
-                          <Image
-                            src={row.view}
-                            alt="Image"
-                            fill
-                            sizes="(max-width: 25px) 100vw, (max-width: 25px) 50vw, 33vw"
-                          />
-                        </div>
-                      </TableCell>
-                      <TableCell align="left" className="text-center">
-                        <div className="flex w-[50px] justify-between items-center gap-4">
-                          <button
-                            onClick={() => {
-                              setIsEdit(true);
-                              setSelectedCategory(row);
-                            }}
+                          </TableCell>
+                          <TableCell
+                            align="left"
+                            className="text-white text-left text-[15px] "
                           >
-                            <ModeEditIcon htmlColor="white" fontSize="small" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleDeleteClick(row.id);
-                            }}
+                            <div className="flex flex-col justify-start items-start">
+                              {row.options.map((option, index) => (
+                                <h4
+                                  key={index}
+                                  className="text-white text-[13px]"
+                                >
+                                  {option.label}
+                                </h4>
+                              ))}
+                            </div>
+                          </TableCell>
+                          <TableCell
+                            align="left"
+                            className="text-white text-left"
                           >
-                            <DeleteIcon
-                              htmlColor="white"
-                              fontSize="small"
-                              className=" hover:text-danger"
-                            />
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell className="text-white" colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[4, 6, 8]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            className="text-white "
-          />
-        </Paper>
-      </Box>
-      {isVisible.success && (
-        <Modal
-          title="Category deleted successfully"
-          message="Your category has been successfully deleted in the database."
-          type="success"
-          onClose={() => {
-            setIsVisible({
-              success: false,
-              error: false,
-              warning: false,
-            });
-            setSelectedId("");
-            setMessageError("");
-          }}
-          onClick={() => {}}
-        />
-      )}
-      {isVisible.error && (
-        <Modal
-          title="Error delete category"
-          message={messageError}
-          type="error"
-          onClose={() => {
-            setIsVisible({
-              success: false,
-              error: false,
-              warning: false,
-            });
-            setMessageError("");
-            setSelectedId("");
-          }}
-          onClick={() => {}}
-        />
-      )}
-      {isVisible.warning && (
-        <Modal
-          title="Delete category"
-          message="¿Are sure to delete this category?, you will not be able to see it again if you continue"
-          type="delete"
-          onClose={() => {
-            setIsVisible({
-              success: false,
-              error: false,
-              warning: false,
-            });
-            setMessageError("");
-            setSelectedId("");
-          }}
-          onClick={deleteSelectedCategories}
-        />
-      )}
-      <FormCategory
-        isOpen={isEdit}
-        onClose={() => {
-          setIsEdit(false);
-          setSelectedCategory({
-            id: "",
-            name: "",
-            options: [],
-            view: "",
-          });
-        }}
-        category={
-          selectedCategory != null
-            ? selectedCategory
-            : {
+                            <div className="h-[25px] w-[25px] relative overflow-hidden ">
+                              <Image
+                                src={row.view}
+                                alt="Image"
+                                fill
+                                sizes="(max-width: 25px) 100vw, (max-width: 25px) 50vw, 33vw"
+                              />
+                            </div>
+                          </TableCell>
+                          <TableCell align="left" className="text-center">
+                            <div className="flex w-[50px] justify-between items-center gap-4">
+                              <button
+                                onClick={() => {
+                                  setIsEdit(true);
+                                  setSelectedCategory(row);
+                                }}
+                              >
+                                <ModeEditIcon
+                                  htmlColor="white"
+                                  fontSize="small"
+                                />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleDeleteClick(row.id);
+                                }}
+                              >
+                                <DeleteIcon
+                                  htmlColor="white"
+                                  fontSize="small"
+                                  className=" hover:text-danger"
+                                />
+                              </button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow
+                        style={{
+                          height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                      >
+                        <TableCell className="text-white" colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[4, 6, 8]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                className="text-white "
+              />
+            </Paper>
+          </Box>
+          {isVisible.success && (
+            <Modal
+              title="Category deleted successfully"
+              message="Your category has been successfully deleted in the database."
+              type="success"
+              onClose={() => {
+                setIsVisible({
+                  success: false,
+                  error: false,
+                  warning: false,
+                });
+                setSelectedId("");
+                setMessageError("");
+              }}
+              onClick={() => {}}
+            />
+          )}
+          {isVisible.error && (
+            <Modal
+              title="Error delete category"
+              message={messageError}
+              type="error"
+              onClose={() => {
+                setIsVisible({
+                  success: false,
+                  error: false,
+                  warning: false,
+                });
+                setMessageError("");
+                setSelectedId("");
+              }}
+              onClick={() => {}}
+            />
+          )}
+          {isVisible.warning && (
+            <Modal
+              title="Delete category"
+              message="¿Are sure to delete this category?, you will not be able to see it again if you continue"
+              type="delete"
+              onClose={() => {
+                setIsVisible({
+                  success: false,
+                  error: false,
+                  warning: false,
+                });
+                setMessageError("");
+                setSelectedId("");
+              }}
+              onClick={deleteSelectedCategories}
+            />
+          )}
+          <FormCategory
+            isOpen={isEdit}
+            onClose={() => {
+              setIsEdit(false);
+              setSelectedCategory({
                 id: "",
                 name: "",
                 options: [],
                 view: "",
-              }
-        }
-        isFormEdit={true}
-        refreshTable={refreshTable}
-      />
+              });
+            }}
+            category={
+              selectedCategory != null
+                ? selectedCategory
+                : {
+                    id: "",
+                    name: "",
+                    options: [],
+                    view: "",
+                  }
+            }
+            isFormEdit={true}
+            refreshTable={refreshTable}
+          />
+        </>
+      )}
     </main>
-  ) : (
-    <main className="flex min-h-screen w-full bg-black text-white p-5"></main>
   );
 }

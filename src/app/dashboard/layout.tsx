@@ -2,7 +2,7 @@
 
 import SlideBar from "@/components/slider/slide_bar";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function LayoutMenu({
   children,
@@ -10,23 +10,33 @@ export default function LayoutMenu({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-
-  const hasUserEmail = () => {
-    return localStorage.getItem("user_email") !== null;
-  };
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+    const hasUserEmail = () => {
+      return localStorage.getItem("user_email") !== null;
+    };
+
     if (!hasUserEmail()) {
       router.push("/login");
     }
-  }, []);
+  }, [router]);
 
-  return hasUserEmail() ? (
+  if (!isClient) {
+    return (
+      <main className="flex min-h-screen w-full bg-black text-white"></main>
+    );
+  }
+
+  return (
     <main className="flex min-h-screen w-full bg-black text-white">
-      <SlideBar />
-      {children}
+      {isClient && localStorage.getItem("user_email") !== null && (
+        <>
+          <SlideBar />
+          {children}
+        </>
+      )}
     </main>
-  ) : (
-    <main className="flex min-h-screen w-full bg-black text-white"></main>
   );
 }
