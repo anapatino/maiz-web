@@ -569,8 +569,6 @@ export default function Menu() {
         </>
       )}
       {isCartVisible && <ShoppingCart cart={cart} updateQuantityPage={updateQuantityPage} resetCartMenu={resetCartMenu} setIsCartVisible={setIsCartVisible} />}
-      
-      
       <FooterMenu />
     </main>
   );

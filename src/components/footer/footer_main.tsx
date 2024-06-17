@@ -28,14 +28,14 @@ export default function FooterMain() {
             </a>
           </div>
           <div className="flex flex-col absolute right-[15%] text-center items-center space-y-2 text-xl">
-            <a href="" target="_blank">
-              <label>Home</label>
+            <a href="">
+              <label className="cursor-pointer">Home</label>
             </a>
-            <a href="/menu" target="_blank">
-              <label>Menu</label>
+            <a href="/menu">
+              <label className="cursor-pointer">Menu</label>
             </a>
-            <a href="" target="_blank">
-              <label>Schedule</label>
+            <a href="">
+              <label className="cursor-pointer">Schedule</label>
             </a>
           </div>
           <div className="absolute -bottom-1/2 left-0 right-0 flex justify-center items-end ">
@@ -58,21 +58,25 @@ export default function FooterMain() {
         <div className="flex flex-col absolute bottom-[20%] h-[30%] left-0 right-0 justify-center items-center space-y-6 text-xl">
           <Image src={maiz_white} alt="Maiz" className="w-[150px] h-auto" />
           <div className="text-center items-center space-x-8">
-            <a href="" target="_blank">
-              <label>Home</label>
+            <a href="">
+              <label className="cursor-pointer">Home</label>
             </a>
-            <a href="/menu" target="_blank">
-              <label>Menu</label>
+            <a href="/menu">
+              <label className="cursor-pointer">Menu</label>
             </a>
-            <a href="" target="_blank">
-              <label>Schedule</label>
+            <a href="">
+              <label className="cursor-pointer">Schedule</label>
             </a>
           </div>
           <div className="flex flex-row justify-center items-center gap-8">
             <a href="" target="_blank" className="">
               <Image src={facebook} alt="Facebook" width={30} />
             </a>
-            <a href="https://www.instagram.com/maizmalta" target="_blank" className="">
+            <a
+              href="https://www.instagram.com/maizmalta"
+              target="_blank"
+              className=""
+            >
               <Image src={instagram} alt="Instagram" width={30} />
             </a>
           </div>
