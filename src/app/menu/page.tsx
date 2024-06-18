@@ -303,7 +303,7 @@ export default function Menu() {
       <CarouselMenu onCategorySelect={handleCategorySelect}/>
 
       <div className="w-[80%]">
-        <div className="mx-auto px-4 py-9 max-phone:px-6 max-phone:py-24 max-laptop:max-w-7xl max-laptop:px-8">
+        <div className="mx-auto pt-9">
           <div className="flex flex-row justify-between items-center mb-10">
             <div className="w-full phone:w-1/2">
               <h3 className="text-4xl phone:text-5xl tablet:text-6xl laptop:text-7xl desktop:text-8xl 2xl:text-9xl">
@@ -348,7 +348,7 @@ export default function Menu() {
                     objectFit="cover"
                   />
                 </div>
-                <div className="w-1/2 overflow-y-scroll max-phone:w-2/3 h-[160px] max-phone:h-[100px] max-tablet:h-[130px]">
+                <div className="w-1/2 overflow-y-scroll max-phone:w-2/3 h-[160px] max-phone:h-[100px] max-phone:overflow-hidden max-tablet:h-[130px] max-tablet:overflow-hidden">
                   <h4 className="text-white font-semibold text-[20px] max-phone:text-[14px] max-tablet:text-[15px]">
                     {product.name}
                   </h4>
@@ -479,7 +479,7 @@ export default function Menu() {
             </div>
           ) : (
             <div className="fixed inset-0 bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden">
-              <div className="bg-black flex rounded-3xl h-[450px]">
+              <div className="bg-black flex rounded-3xl h-[450px] w-[80%]">
                 <div className="relative w-[500px] h-[450px] rounded-xl mr-6">
                   <img
                     src={selectedProduct?.image}
@@ -489,7 +489,7 @@ export default function Menu() {
                   />
                 </div>
                 
-                <div className="bg-black p-8 relative w-1/2 max-w-2xl items-center overflow-auto">
+                <div className="bg-black p-8 relative min-w-1/2 items-center">
                   <button
                     onClick={closeModal}
                     className="absolute top-4 right-4 bg-[#4a4a4a] rounded-full w-8 h-8 flex items-center justify-center text-white text-2xl"
@@ -497,11 +497,12 @@ export default function Menu() {
                     <h4>&times;</h4>
                   </button>
 
-                  <div className="">
-                    <h2 className="text-3xl font-semibold mt-4">
-                      {selectedProduct?.name}
-                    </h2>
-                    <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
+                  <h2 className="text-3xl font-semibold mt-4">
+                    {selectedProduct?.name}
+                  </h2>
+                  <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
+                  
+                  <div className="overflow-y-scroll h-[126px]"> 
                     <h4 className="text-medium font-bold">Description</h4>
                     <label className="text-medium">{selectedProduct?.description}</label>
                     <div className="pl-1">
@@ -509,58 +510,59 @@ export default function Menu() {
                         <div key={index} className="flex flex-col mt-4">
                           <label className="text-medium font-bold">{option.label}:</label>
                           <label className="text-medium">{option.description}</label>
-                          {option.items.map((item, itemIndex) => (
-                            <div key={itemIndex} className="mt-2">
-                              <label>
-                                <input
-                                  type="radio"
-                                  name={`option-${option.label}`}
-                                  value={item.label}
-                                  onChange={() => handleOptionChange(option.label, item.label)}
-                                  className="mr-2 accent-[#DEA001]"
-                                />
-                                {item.label} - {item.value}€
-                              </label>
-                            </div>
-                          ))}
-                          {optionError[option.label] && (
-                            <p className="text-gray-500">{optionError[option.label]}</p>
-                          )}
+                            {option.items.map((item, itemIndex) => (
+                              <div key={itemIndex} className="mt-2">
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`option-${option.label}`}
+                                    value={item.label}
+                                    onChange={() => handleOptionChange(option.label, item.label)}
+                                    className="mr-2 accent-[#DEA001]"
+                                  />
+                                  {item.label} - {item.value}€
+                                </label>
+                              </div>
+                            ))}
+                            {optionError[option.label] && (
+                              <p className="text-gray-500">{optionError[option.label]}</p>
+                            )}
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4 w-full">
-                      <h4 className="text-lg">Comments:</h4>
-                      <textarea
-                        value={comments}
-                        onChange={(e) => setComments(e.target.value)}
-                        className="w-full mt-2 p-2 border rounded text-white bg-transparent resize-none"
-                      />
-                    </div>
-                    <div className="flex justify-between items-center mt-4">
-                      <div className="flex items-center">
-                        <button
-                          onClick={decrementQuantity}
-                          className="bg-[#4A4A4A] text-white rounded-full w-8 h-8 flex items-center justify-center"
-                          disabled={quantityA <= 1}
-                        >
-                          -
-                        </button>
-                        <span className="mx-4">{quantityA}</span>
-                        <button
-                          onClick={incrementQuantity}
-                          className="bg-[#7F5B01] text-white rounded-full w-8 h-8 flex items-center justify-center"
-                        >
-                          +
-                        </button>
-                      </div>
+                  </div>
+                  
+                  <div className="mt-4 w-full">
+                    <h4 className="text-lg">Comments:</h4>
+                    <textarea
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      className="w-full mt-2 p-2 border rounded text-white bg-transparent resize-none"
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="flex items-center">
                       <button
-                        onClick={handleAdd}
-                        className="bg-[#DEA001] text-white py-2 px-4 rounded-full"
+                        onClick={decrementQuantity}
+                        className="bg-[#4A4A4A] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                        disabled={quantityA <= 1}
                       >
-                        <h4 className="px-3">Add</h4>
+                        -
+                      </button>
+                      <span className="mx-4">{quantityA}</span>
+                      <button
+                        onClick={incrementQuantity}
+                        className="bg-[#7F5B01] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                      >
+                        +
                       </button>
                     </div>
+                    <button
+                      onClick={handleAdd}
+                      className="bg-[#DEA001] text-white py-2 px-4 rounded-full"
+                    >
+                      <h4 className="px-3">Add</h4>
+                    </button>
                   </div>
                 </div>
               </div>

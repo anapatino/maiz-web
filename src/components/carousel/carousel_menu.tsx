@@ -100,16 +100,16 @@ export default function CarouselMenu({ onCategorySelect }: CarouselMenuProps) {
             className="text-center relative cursor-pointer"
             onClick={() => onCategorySelect(category)} // Pasar el objeto completo de la categoría
           >
-            <div className="mx-auto rounded-full bg-[#5A430B] w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[75px] max-phone:h-[75px]">
+            <div className="mx-auto rounded-full bg-[#5A430B] w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px]">
               <Image
                 src={category.image}
                 alt={category.name}
-                className="p-4"
+                className="p-6 max-phone:p-5"
                 width={110}
                 height={110}
               />
             </div>
-            <h4 className="text-[18px] max-phone:text-[14px] max-tablet:text-[15px]">{category.name}</h4>
+            <h4 className="text-[18px] pt-[6px] max-phone:text-[14px] max-tablet:text-[15px]">{category.name}</h4>
           </div>
         ))}
       </Slider>
