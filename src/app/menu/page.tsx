@@ -130,6 +130,16 @@ export default function Menu() {
     setIsModalOpen(false);
   };
 
+  const handleOptionChange = (optionLabel: string, itemLabel: string) => {
+    setSelectedOptions(prev => {
+      if (prev[optionLabel] === itemLabel) {
+        const { [optionLabel]: _, ...rest } = prev;
+        return rest;
+      }
+      const newSelectedOptions = { ...prev, [optionLabel]: itemLabel };
+      return newSelectedOptions;
+    });
+  };
 
   const deepEqual = (a: any, b: any): boolean => {
     if (a === b) return true;
@@ -221,6 +231,30 @@ export default function Menu() {
     setIsCartVisible(!isCartVisible);
   };
 
+  const resetCartMenu = () => {
+    setCart([]);
+  };
+
+  const updateQuantityPage = (idOrder: number, delta: number) => {
+    setCart((items) => {
+      const updatedItems = items.map((item) => {
+        if (item.idOrder === idOrder && item.orderquantity + delta > 0) {
+          return {
+            ...item,
+            orderquantity: item.orderquantity + delta,
+          };
+        }
+        else if (item.idOrder === idOrder && item.orderquantity + delta <= 0) {
+          return null;
+        }
+        else {
+          return item;
+        }
+      }).filter((item): item is ProductOnCart => item !== null);
+  
+      return updatedItems;
+    });
+  };
   
   
 
@@ -331,7 +365,6 @@ export default function Menu() {
               )}
             </div>
           </div>
-
           <div className="w-full h-auto">
             {filteredProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center flex-1 p-4">
@@ -411,6 +444,226 @@ export default function Menu() {
         </div>
       </div>
 
+      {isModalOpen && selectedProduct && selectedProduct.available && (
+        <>
+          {isMobileScreen ? (
+            <div className="fixed inset-0 bg-black bg-opacity-80 z-50 overflow-hidden flex items-center justify-center">
+              
+              <div className="bg-black p-8 relative w-full max-w-lg max-h-screen overflow-y-auto">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 bg-[#4A4A4A] rounded-full w-8 h-8 flex items-center justify-center text-white text-2xl"
+                >
+                  &times;
+                </button>
+                <div className="w-full flex justify-center">
+                  <Image
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    width={484}
+                    height={527}
+                    className="rounded-3xl w-full"
+                  />
+                </div>
+                <div className="bg-black p-8 relative items-center overflow-auto">
+                  <div className="">
+                    <h2 className="text-3xl font-semibold mt-4">
+                      {selectedProduct.name}
+                    </h2>
+                    <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
+
+                    <h4 className="text-medium font-bold">Description</h4>
+                    <label className="text-medium">{selectedProduct.description}</label>
+                    <div className="">
+                      {selectedProduct?.options.map((option, index) => (
+                        <Disclosure key={index}>
+                          {({ open }) => (
+                            <>
+                              <Disclosure.Button className="flex justify-between w-full px-4 py-1 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                <h4 className="text-medium font-bold">{option.label}</h4>
+                                {open ? (
+                                  <ChevronUpIcon className="w-5 h-5" />
+                                ) : (
+                                  <ChevronDownIcon className="w-5 h-5" />
+                                )}
+                              </Disclosure.Button>
+                              <Disclosure.Panel className="">
+                                <label className="text-medium">{option.description}</label>
+                                {option.items.map((item, itemIndex) => (
+                                  <div key={itemIndex} className="mt-2">
+                                    <label className="flex items-center">
+                                      <input
+                                        type="checkbox"
+                                        name={`option-${option.label}`}
+                                        value={item.label}
+                                        checked={selectedOptions[option.label] === item.label}
+                                        onChange={() => handleOptionChange(option.label, item.label)}
+                                        className="mr-2 accent-[#DEA001] appearance-none rounded-full h-4 w-4 border border-gray-300 checked:bg-[#DEA001] checked:border-transparent focus:outline-none"
+                                      />
+                                      {item.label} - {item.value}€
+                                    </label>
+                                  </div>
+                                ))}
+                              </Disclosure.Panel>
+                            </>
+                          )}
+                        </Disclosure>
+                      ))}
+                    </div>
+                    <div className="mt-4 w-full">
+                      <h4 className="text-lg">Comments:</h4>
+                      <textarea
+                        value={comments}
+                        onChange={(e) => setComments(e.target.value)}
+                        className="w-full mt-2 p-2 border rounded text-white bg-transparent resize-none"
+                      />
+                    </div>
+                    <div className="flex justify-between items-center mt-4">
+                      <div className="flex items-center">
+                        <button
+                          onClick={decrementQuantity}
+                          className="bg-[#4A4A4A] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                          disabled={quantityA <= 1}
+                        >
+                          -
+                        </button>
+                        <span className="mx-4">{quantityA}</span>
+                        <button
+                          onClick={incrementQuantity}
+                          className="bg-[#7F5B01] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        onClick={handleAdd}
+                        className="bg-[#DEA001] text-white py-2 px-4 rounded-full"
+                      >
+                        <h4 className="px-3">Add</h4>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="fixed inset-0 bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden">
+              <div className="bg-black flex rounded-3xl h-[450px] max-laptop:w-[80%] max-desktop:w-[70%]">
+                <div className="relative w-1/2 h-[450px] rounded-3xl max-laptop:w-1/2">
+                  <img
+                    src={selectedProduct?.image}
+                    alt={selectedProduct?.name}
+                    className="object-cover w-full h-full rounded-3xl"
+                    style={{ position: "absolute", top: 0, left: 0 }}
+                  />
+                </div>
+                
+                <div className="bg-black p-8 relative w-1/2 items-center max-laptop:w-1/2 rounded-r-3xl">
+                  <button
+                    onClick={closeModal}
+                    className="absolute top-4 right-4 bg-[#4a4a4a] rounded-full w-8 h-8 flex items-center justify-center text-white text-2xl"
+                  >
+                    <h4>&times;</h4>
+                  </button>
+
+                  <h2 className="text-3xl font-semibold mt-4 truncate">
+                    {selectedProduct?.name}
+                  </h2>
+                  <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
+                  
+                  <div className="overflow-y-auto h-[145px]">
+                    <Disclosure>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex justify-between w-full px-4 py-1 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                            <h4 className="text-medium font-bold">Description</h4>
+                            {open ? (
+                              <ChevronUpIcon className="w-5 h-5" />
+                            ) : (
+                              <ChevronDownIcon className="w-5 h-5" />
+                            )}
+                          </Disclosure.Button>
+                          <Disclosure.Panel className="">
+                            <label className="text-medium">{selectedProduct?.description}</label>
+                          </Disclosure.Panel>
+                        </>
+                      )}
+                    </Disclosure>
+                    {selectedProduct?.options.map((option, index) => (
+                      <Disclosure key={index}>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="flex justify-between w-full px-4 py-1 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                              <h4 className="text-medium font-bold">{option.label}</h4>
+                              {open ? (
+                                <ChevronUpIcon className="w-5 h-5" />
+                              ) : (
+                                <ChevronDownIcon className="w-5 h-5" />
+                              )}
+                            </Disclosure.Button>
+                            <Disclosure.Panel className="">
+                              <label className="text-medium">{option.description}</label>
+                              {option.items.map((item, itemIndex) => (
+                                <div key={itemIndex} className="mt-2">
+                                  <label className="flex items-center">
+                                    <input
+                                      type="checkbox"
+                                      name={`option-${option.label}`}
+                                      value={item.label}
+                                      checked={selectedOptions[option.label] === item.label}
+                                      onChange={() => handleOptionChange(option.label, item.label)}
+                                      className="mr-2 accent-[#DEA001] appearance-none rounded-full h-4 w-4 border border-gray-300 checked:bg-[#DEA001] checked:border-transparent focus:outline-none"
+                                    />
+                                    {item.label} - {item.value}€
+                                  </label>
+                                </div>
+                              ))}
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 w-full">
+                    <h4 className="text-lg">Comments:</h4>
+                    <textarea
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      className="w-full h-11 mt-2 p-2 border rounded text-white bg-transparent resize-none"
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="flex items-center">
+                      <button
+                        onClick={decrementQuantity}
+                        className="bg-[#4A4A4A] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                        disabled={quantityA <= 1}
+                      >
+                        -
+                      </button>
+                      <span className="mx-4">{quantityA}</span>
+                      <button
+                        onClick={incrementQuantity}
+                        className="bg-[#7F5B01] text-white rounded-full w-8 h-8 flex items-center justify-center"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      onClick={handleAdd}
+                      className="bg-[#DEA001] text-white py-2 px-4 rounded-full"
+                    >
+                      <h4 className="px-3">Add</h4>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+      {isCartVisible && <ShoppingCart cart={cart} updateQuantityPage={updateQuantityPage} resetCartMenu={resetCartMenu} setIsCartVisible={setIsCartVisible} />}
       <FooterMenu />
     </main>
   );
