@@ -332,56 +332,88 @@ export default function Menu() {
               )}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 phone:grid-cols-2 tablet:grid-cols-2 laptop:grid-cols-2 desktop:grid-cols-2 xl:gap-x-10">
-          {filteredProducts.map((product) => (
-              <a
-                key={product.id}
-                className="group flex items-center relative"
-                onClick={() => openModal(product)}
-              >
-                <div className="w-[163px] h-[160px] max-phone:w-[100px] max-phone:h-[100px] max-tablet:w-[130px] max-tablet:h-[130px] mr-4 relative overflow-hidden rounded-lg ">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-                <div className="w-1/2 overflow-y-scroll max-phone:w-2/3 h-[160px] max-phone:h-[100px] max-phone:overflow-hidden max-tablet:h-[130px] max-tablet:overflow-hidden">
-                  <h4 className="text-white font-semibold text-[20px] max-phone:text-[14px] max-tablet:text-[15px]">
-                    {product.name}
-                  </h4>
-                  <h4 className="text-[15px] font-medium max-phone:hidden max-tablet:hidden text-gray-400 max-phone:text-[12px] max-tablet:text-[13px]">
-                    {product.description}
-                  </h4>
-                  <div className="flex items-center inset-0">
-                    {!product.available && (
-                      <h4
-                        className="text-sm max-phone:text-[11px] max-tablet:text-[12px] bg-[#4A4A4A] font-semibold text-white px-2 rounded-full"
-                        style={{ zIndex: 10 }}
-                      >
-                        No available
-                      </h4>
-                    )}
-                    {product.available && (
-                      <div className="w-2 h-2 bg-transparent" />
-                    )}
+          <div className="w-full h-auto">
+            {filteredProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center flex-1 p-4">
+                {selectedCategory?.image ? (
+                  <div className=" w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px]">
+                    <Image
+                      src={selectedCategory.image}
+                      alt={selectedCategory.name || 'Category image'}
+                      className="p-3 max-phone:p-4"
+                      width={110}
+                      height={110}
+                    />
                   </div>
-                  <h4 className=" text-lg font-bold text-white max-phone:text-[15px] max-tablet:text-[17px]">
-                    {product.price}€
-                  </h4>
-                  {product.available && (
-                    <button
-                      className="absolute bottom-0 right-0 p-2 rounded-full text-white w-8 h-8 flex items-center justify-center"
-                      style={{ background: "#7F5B01" }}
+                ) : (
+                  <div className="p-6 max-phone:p-5" style={{ width: 110, height: 110 }} />
+                )}
+                <h2 className="mb-4 text-3xl text-center">
+                  We have no products in the {selectedCategory?.name || 'this category'} category.
+                </h2>
+              </div>
+              
+            ) : (
+              <div className="grid grid-cols-1 gap-x-6 gap-y-10 phone:grid-cols-2 tablet:grid-cols-2 laptop:grid-cols-2 desktop:grid-cols-2 xl:gap-x-10">
+                {filteredProducts.length === 0 ? (
+                  <div>
+                    
+                    {selectedCategory?.image}
+                    <h1 className="text-white text-2xl">No hay productos</h1>
+                  </div>
+                  
+                ) : (
+                  filteredProducts.map((product) => (
+                    <a
+                      key={product.id}
+                      className="group flex items-center relative"
+                      onClick={() => openModal(product)}
                     >
-                      <h2 className="text-4xl">+</h2>
-                    </button>
-                  )}
-                </div>
-              </a>
-            ))}
+                      <div className="w-[163px] h-[160px] max-phone:w-[100px] max-phone:h-[100px] max-tablet:w-[130px] max-tablet:h-[130px] mr-4 relative overflow-hidden rounded-lg">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                      <div className="w-1/2 overflow-y-scroll max-phone:w-2/3 h-[160px] max-phone:h-[100px] max-phone:overflow-hidden max-tablet:h-[130px] max-tablet:overflow-hidden">
+                        <h4 className="text-white font-semibold text-[20px] max-phone:text-[14px] max-tablet:text-[15px]">
+                          {product.name}
+                        </h4>
+                        <h4 className="text-[15px] font-medium max-phone:hidden max-tablet:hidden text-gray-400 max-phone:text-[12px] max-tablet:text-[13px]">
+                          {product.description}
+                        </h4>
+                        <div className="flex items-center inset-0">
+                          {!product.available && (
+                            <h4
+                              className="text-sm max-phone:text-[11px] max-tablet:text-[12px] bg-[#4A4A4A] font-semibold text-white px-2 rounded-full"
+                              style={{ zIndex: 10 }}
+                            >
+                              No available
+                            </h4>
+                          )}
+                          {product.available && (
+                            <div className="w-2 h-2 bg-transparent" />
+                          )}
+                        </div>
+                        <h4 className="text-lg font-bold text-white max-phone:text-[15px] max-tablet:text-[17px]">
+                          {product.price}€
+                        </h4>
+                        {product.available && (
+                          <button
+                            className="absolute bottom-0 right-0 p-2 rounded-full text-white w-8 h-8 flex items-center justify-center"
+                            style={{ background: "#7F5B01" }}
+                          >
+                            <h2 className="text-4xl">+</h2>
+                          </button>
+                        )}
+                      </div>
+                    </a>
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -479,7 +511,7 @@ export default function Menu() {
             </div>
           ) : (
             <div className="fixed inset-0 bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden">
-              <div className="bg-black flex rounded-3xl h-[450px] w-[80%]">
+              <div className="bg-black flex rounded-3xl h-[450px] w-[80%] max-laptop:w-[100%]">
                 <div className="relative w-[500px] h-[450px] rounded-xl mr-6">
                   <img
                     src={selectedProduct?.image}

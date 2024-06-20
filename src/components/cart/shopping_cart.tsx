@@ -173,7 +173,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="relative w-full h-full mx-auto bg-black overflow-auto">
+      <div className="relative w-full h-full mx-auto bg-black overflow-auto flex flex-col min-h-screen">
         <div className="w-full relative z-10 flex justify-center items-center p-32 max-phone:pt-16 max-phone:pb-10 max-phone:px-16 pb-10">
           <div className="text-center">
             <h3 className="text-9xl max-tablet:text-7xl max-phone:text-5xl">
@@ -187,7 +187,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
         >
           <Image src={arrowleft} alt="Back" className="w-8 h-8" />
         </button>
-
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center flex-1 p-4">
             <Image
