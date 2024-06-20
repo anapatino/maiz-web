@@ -13,6 +13,8 @@ import { ProductResponse } from "@/domain/product";
 import { Category } from "@/domain/category";
 import { CategoryRequest } from "../../data/repository/category_request";
 import { Options } from "@/domain/options";
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
 
 interface ProductOnCart{
   id: string;
@@ -61,7 +63,6 @@ export default function Menu() {
   const [selectedProduct, setSelectedProduct] = useState<ProductResponse | null>(null);
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
-  const [optionError, setOptionError] = useState<{ [key: string]: string | null }>({});
 
   const [isMobileScreen, setIsMobileScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -131,26 +132,21 @@ export default function Menu() {
   
 
   const handleOptionChange = (optionLabel: string, itemLabel: string) => {
-    setSelectedOptions(prev => ({ ...prev, [optionLabel]: itemLabel }));
-    setOptionError(prev => ({ ...prev, [optionLabel]: null }));
+    setSelectedOptions(prev => {
+      // If the itemLabel is already selected for this optionLabel, deselect it
+      if (prev[optionLabel] === itemLabel) {
+        // Create a copy of the previous state without the selected itemLabel
+        const newSelectedOptions = { ...prev };
+        delete newSelectedOptions[optionLabel];
+        return newSelectedOptions;
+      }
+      // Otherwise, select the new itemLabel
+      return { ...prev, [optionLabel]: itemLabel };
+    });
   };
 
   const handleAdd = () => {
-    let hasError = false;
-    const newOptionError = { ...optionError };
-
-    selectedProduct?.options.forEach(option => {
-      if (!selectedOptions[option.label]) {
-        hasError = true;
-        newOptionError[option.label] = "Please select an option.";
-      }
-    });
-
-    setOptionError(newOptionError);
-
-    if (hasError) {
-      return;
-    }
+    
     
     if (selectedProduct) {
       let totalOrder = calculateTotalPrice();
@@ -355,21 +351,14 @@ export default function Menu() {
               
             ) : (
               <div className="grid grid-cols-1 gap-x-6 gap-y-10 phone:grid-cols-2 tablet:grid-cols-2 laptop:grid-cols-2 desktop:grid-cols-2 xl:gap-x-10">
-                {filteredProducts.length === 0 ? (
-                  <div>
-                    
-                    {selectedCategory?.image}
-                    <h1 className="text-white text-2xl">No hay productos</h1>
-                  </div>
-                  
-                ) : (
-                  filteredProducts.map((product) => (
-                    <a
-                      key={product.id}
-                      className="group flex items-center relative"
-                      onClick={() => openModal(product)}
-                    >
-                      <div className="w-[163px] h-[160px] max-phone:w-[100px] max-phone:h-[100px] max-tablet:w-[130px] max-tablet:h-[130px] mr-4 relative overflow-hidden rounded-lg">
+                {filteredProducts.map((product) => (
+                  <a
+                    key={product.id}
+                    className="group flex items-center relative"
+                    onClick={() => openModal(product)}
+                  >
+                    <div className="group flex items-center relative">
+                      <div className="w-[163px] h-[160px] max-phone:w-[100px] max-phone:h-[100px] max-tablet:w-[130px] max-tablet:h-[130px] mr-4 relative overflow-hidden rounded-lg flex-shrink-0">
                         <Image
                           src={product.image}
                           alt={product.name}
@@ -377,14 +366,14 @@ export default function Menu() {
                           objectFit="cover"
                         />
                       </div>
-                      <div className="w-1/2 overflow-y-scroll max-phone:w-2/3 h-[160px] max-phone:h-[100px] max-phone:overflow-hidden max-tablet:h-[130px] max-tablet:overflow-hidden">
+                      <div className="flex-grow h-[160px] max-phone:h-[100px] max-tablet:h-[130px] overflow-y-auto">
                         <h4 className="text-white font-semibold text-[20px] max-phone:text-[14px] max-tablet:text-[15px]">
                           {product.name}
                         </h4>
-                        <h4 className="text-[15px] font-medium max-phone:hidden max-tablet:hidden text-gray-400 max-phone:text-[12px] max-tablet:text-[13px]">
+                        <h4 className="text-[15px] font-medium text-gray-400 max-phone:hidden max-tablet:hidden max-phone:text-[12px] max-tablet:text-[13px]">
                           {product.description}
                         </h4>
-                        <div className="flex items-center inset-0">
+                        <div className="flex items-center">
                           {!product.available && (
                             <h4
                               className="text-sm max-phone:text-[11px] max-tablet:text-[12px] bg-[#4A4A4A] font-semibold text-white px-2 rounded-full"
@@ -409,9 +398,9 @@ export default function Menu() {
                           </button>
                         )}
                       </div>
-                    </a>
-                  ))
-                )}
+                    </div>
+                  </a>
+                ))}
               </div>
             )}
           </div>
@@ -467,9 +456,6 @@ export default function Menu() {
                               </label>
                             </div>
                           ))}
-                          {optionError[option.label] && (
-                            <p className="text-gray-500">{optionError[option.label]}</p>
-                          )}
                         </div>
                       ))}
                     </div>
@@ -511,17 +497,17 @@ export default function Menu() {
             </div>
           ) : (
             <div className="fixed inset-0 bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50 overflow-hidden">
-              <div className="bg-black flex rounded-3xl h-[450px] w-[80%] max-laptop:w-[100%]">
-                <div className="relative w-[500px] h-[450px] rounded-xl mr-6">
+              <div className="bg-black flex rounded-3xl h-[450px] max-laptop:w-[80%] max-desktop:w-[70%]">
+                <div className="relative w-1/2 h-[450px] rounded-3xl max-laptop:w-1/2">
                   <img
                     src={selectedProduct?.image}
                     alt={selectedProduct?.name}
-                    className="object-cover w-full h-full rounded-xl"
+                    className="object-cover w-full h-full rounded-3xl"
                     style={{ position: "absolute", top: 0, left: 0 }}
                   />
                 </div>
                 
-                <div className="bg-black p-8 relative min-w-1/2 items-center">
+                <div className="bg-black p-8 relative w-1/2 items-center max-laptop:w-1/2 rounded-r-3xl">
                   <button
                     onClick={closeModal}
                     className="absolute top-4 right-4 bg-[#4a4a4a] rounded-full w-8 h-8 flex items-center justify-center text-white text-2xl"
@@ -529,39 +515,64 @@ export default function Menu() {
                     <h4>&times;</h4>
                   </button>
 
-                  <h2 className="text-3xl font-semibold mt-4">
+                  <h2 className="text-3xl font-semibold mt-4 truncate">
                     {selectedProduct?.name}
                   </h2>
                   <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
                   
-                  <div className="overflow-y-scroll h-[126px]"> 
-                    <h4 className="text-medium font-bold">Description</h4>
-                    <label className="text-medium">{selectedProduct?.description}</label>
-                    <div className="pl-1">
-                      {selectedProduct?.options!.map((option, index) => (
-                        <div key={index} className="flex flex-col mt-4">
-                          <label className="text-medium font-bold">{option.label}:</label>
-                          <label className="text-medium">{option.description}</label>
-                            {option.items.map((item, itemIndex) => (
-                              <div key={itemIndex} className="mt-2">
-                                <label>
-                                  <input
-                                    type="radio"
-                                    name={`option-${option.label}`}
-                                    value={item.label}
-                                    onChange={() => handleOptionChange(option.label, item.label)}
-                                    className="mr-2 accent-[#DEA001]"
-                                  />
-                                  {item.label} - {item.value}€
-                                </label>
-                              </div>
-                            ))}
-                            {optionError[option.label] && (
-                              <p className="text-gray-500">{optionError[option.label]}</p>
+                  <div className="overflow-y-auto h-[145px]">
+                    <Disclosure>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex justify-between w-full px-4 py-2 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                            <h4 className="text-medium font-bold">Description</h4>
+                            {open ? (
+                              <ChevronUpIcon className="w-5 h-5" />
+                            ) : (
+                              <ChevronDownIcon className="w-5 h-5" />
                             )}
-                        </div>
-                      ))}
-                    </div>
+                          </Disclosure.Button>
+                          <Disclosure.Panel className="">
+                            <label className="text-medium">{selectedProduct?.description}</label>
+                          </Disclosure.Panel>
+                        </>
+                      )}
+                    </Disclosure>
+
+                    {selectedProduct?.options.map((option, index) => (
+                      <Disclosure key={index}>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="flex justify-between w-full px-4 py-2 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                              <h4 className="text-medium font-bold">{option.label}</h4>
+                              {open ? (
+                                <ChevronUpIcon className="w-5 h-5" />
+                              ) : (
+                                <ChevronDownIcon className="w-5 h-5" />
+                              )}
+                            </Disclosure.Button>
+                            <Disclosure.Panel className="">
+                              <label className="text-medium">{option.description}</label>
+                              {option.items.map((item, itemIndex) => (
+                                <div key={itemIndex} className="mt-2">
+                                  <label>
+                                    <input
+                                      type="radio"
+                                      name={`option-${option.label}`}
+                                      value={item.label}
+                                      checked={selectedOptions[option.label] === item.label}
+                                      onChange={() => handleOptionChange(option.label, item.label)}
+                                      className="mr-2 accent-[#DEA001]"
+                                    />
+                                    {item.label} - {item.value}€
+                                  </label>
+                                </div>
+                              ))}
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
                   </div>
                   
                   <div className="mt-4 w-full">
@@ -569,7 +580,7 @@ export default function Menu() {
                     <textarea
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
-                      className="w-full mt-2 p-2 border rounded text-white bg-transparent resize-none"
+                      className="w-full h-11 mt-2 p-2 border rounded text-white bg-transparent resize-none"
                     />
                   </div>
                   <div className="flex justify-between items-center mt-4">
