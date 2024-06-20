@@ -293,7 +293,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                   &times;
                 </button>
               </div>
-              <h2 className="text-3xl mb-4 text-center text-black">
+              <h2 className="font-semibold text-3xl mb-4 text-center text-black">
                 Order Confirmation
               </h2>
               <div className="flex justify-between mb-4">
@@ -312,21 +312,21 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
               </div>
               <form>
                 <div className="mb-4">
-                  <label className="block text-[#4A4A4A]">Names</label>
+                  <label className="font-semibold block text-[#4A4A4A]">Names</label>
                   <input
                     type="text"
-                    className="w-full p-2 border rounded"
+                    className="font-semibold w-full p-2 border rounded"
                     placeholder="Ex: Ana Patiño"
                     style={{ color: "#4A4A4A" }}
                     {...register("name", { required: "Name is required" })}
                   />
-                  {errors.name && <p className="text-gray-600">{errors.name.message}</p>}
+                  {errors.name && <p className="font-semibold text-gray-600">{errors.name.message}</p>}
                 </div>
                 <div className="mb-4">
-                  <label className="block text-[#4A4A4A]">Phone</label>
+                  <label className="font-semibold block text-[#4A4A4A]">Phone</label>
                   <input
                     type="text"
-                    className="w-full p-2 border rounded"
+                    className="font-semibold w-full p-2 border rounded"
                     placeholder="Ex: 3015634567"
                     style={{ color: "#4A4A4A" }}
                     {...register("phone", {
@@ -337,23 +337,23 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                       },
                     })}
                   />
-                  {errors.phone && <p className="text-gray-600">{errors.phone.message}</p>}
+                  {errors.phone && <p className="font-semibold text-gray-600">{errors.phone.message}</p>}
                 </div>
                 {isToGo && (
                   <div className="mb-4">
-                    <label className="block text-[#4A4A4A]">Address</label>
+                    <label className="font-semibold block text-[#4A4A4A]">Address</label>
                     <input
                       type="text"
-                      className="w-full p-2 border rounded"
+                      className="font-semibold w-full p-2 border rounded"
                       placeholder="Ex: Los cortijos"
                       style={{ color: "#4A4A4A" }}
                       {...register("address", { required: "Address is required" })}
                     />
-                    {errors.address && <p className="text-gray-600">{errors.address.message}</p>}
+                    {errors.address && <p className="font-semibold text-gray-600">{errors.address.message}</p>}
                   </div>
                 )}
                 <div className="mb-4">
-                  <label className="block text-[#4A4A4A]">Method of payment</label>
+                  <label className="font-semibold block text-[#4A4A4A]">Method of payment</label>
                   <div className="flex items-center space-x-4 pt-3">
                     <label className="flex items-center">
                       <input
@@ -362,7 +362,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                         value="cash"
                         {...register("paymentMethod", { required: "Payment method is required" })}
                       />
-                      <span className="text-[#4A4A4A]">Payment in cash</span>
+                      <span className="font-semibold text-[#4A4A4A]">Payment in cash</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -371,17 +371,17 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                         value="transfer"
                         {...register("paymentMethod", { required: "Payment method is required" })}
                       />
-                      <span className="text-[#4A4A4A]">Transfer</span>
+                      <span className="font-semibold text-[#4A4A4A]">Transfer</span>
                     </label>
                   </div>
-                  {errors.paymentMethod && <p className="text-gray-600">{errors.paymentMethod.message}</p>}
+                  {errors.paymentMethod && <p className="font-semibold text-gray-600">{errors.paymentMethod.message}</p>}
                 </div>
                 {watch("paymentMethod") === "cash" && (
                   <div className="mb-4">
-                    <label className="block text-[#4A4A4A]">Cash value</label>
+                    <label className="font-semibold block text-[#4A4A4A]">Cash value</label>
                     <input
                       type="number"
-                      className="w-full p-2 border rounded"
+                      className="font-semibold w-full p-2 border rounded"
                       placeholder="Ex: 5"
                       style={{ color: "#4A4A4A" }}
                       {...register("cashValue", {
@@ -392,7 +392,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                         }
                       })}
                     />
-                    {errors.cashValue && <p className="text-gray-600">{errors.cashValue.message}</p>}
+                    {errors.cashValue && <p className="font-semibold text-gray-600">{errors.cashValue.message}</p>}
                   </div>
                 )}
                 <div className="flex justify-end">
