@@ -3,12 +3,10 @@ import Image from "next/image";
 import car from "../../../public/svg/shoppingcart/car.svg";
 import arrowleft from "../../../public/svg/arrows/arrow_left.svg";
 import FooterMenu from "@/components/footer/footer_menu";
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from "react-hook-form";
 import ModalConfirm from "@/components/card/modal";
 import { Options } from "@/domain/options";
 import StarRating from "../rating/star_rating";
-
-
 
 interface ProductOnCart {
   id: string;
@@ -28,7 +26,7 @@ interface ProductOnCart {
 interface ShoppingCartProps {
   cart: ProductOnCart[];
   updateQuantityPage: (id: number, delta: number) => void;
-  resetCartMenu:() => void;
+  resetCartMenu: () => void;
   setIsCartVisible: (visible: boolean) => void;
 }
 
@@ -40,7 +38,12 @@ interface FormInput {
   cashValue?: number;
 }
 
-const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, resetCartMenu, setIsCartVisible}) => {
+const ShoppingCart: React.FC<ShoppingCartProps> = ({
+  cart,
+  updateQuantityPage,
+  resetCartMenu,
+  setIsCartVisible,
+}) => {
   const [items, setItems] = useState<ProductOnCart[]>(
     cart.map((product) => ({
       ...product,
@@ -48,85 +51,96 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
     }))
   );
 
-  const [isVisible, setIsVisible] = useState<boolean>(true); 
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [showModal, setShowModal] = useState(false);
   const [isToGo, setIsToGo] = useState(false);
-  const [showModalConfirm, setShowModalConfirm] = useState(false); 
+  const [showModalConfirm, setShowModalConfirm] = useState(false);
   const [showStarRating, setShowStarRating] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>('');
+  const [userName, setUserName] = useState<string>("");
   const [userPhone, setUserPhone] = useState<number>(0);
 
-  const { register, handleSubmit, formState: { errors, isValid }, reset, watch, trigger} = useForm<FormInput>({ mode: "onChange" });
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    watch,
+    trigger,
+  } = useForm<FormInput>({ mode: "onChange" });
 
   const handleToGoChange = (toGo: boolean) => {
     setIsToGo(toGo);
-    reset({ name: "", phone: "", address: "", paymentMethod: "", cashValue: undefined });
+    reset({
+      name: "",
+      phone: "",
+      address: "",
+      paymentMethod: "",
+      cashValue: undefined,
+    });
   };
 
   const total = items.reduce((sum, item) => {
-      return sum + (parseFloat(item.price)) * item.orderquantity;
+    return sum + parseFloat(item.price) * item.orderquantity;
   }, 0);
-
 
   const formatWhatsAppMessage = (data: FormInput) => {
     let priceWF = 0;
     let message = "Order Details:%0A%0A";
     message += `Name: ${data.name}%0A`;
     message += `Phone: ${data.phone}%0A`;
-    message += `Order Type: ${isToGo ? 'To go' : 'Table'}%0A`;
-    
+    message += `Order Type: ${isToGo ? "To go" : "Table"}%0A`;
+
     if (isToGo) {
       message += `Address: ${data.address}%0A`;
     }
-    
+
     message += `Payment Method: ${data.paymentMethod}%0A`;
-    
+
     if (data.paymentMethod === "cash") {
       message += `Cash Value: ${data.cashValue}%0A`;
     }
-    
+
     message += "%0AProducts:%0A";
-    items.forEach(item => {
+    items.forEach((item) => {
       message += `%0A--> ${item.name} - Quantity: ${item.orderquantity} - Price: ${item.price}€ %0A`;
-      
+
       if (item.options && item.options.length > 0) {
-        item.options.forEach(option => {
+        item.options.forEach((option) => {
           message += `Option: ${option.label}%0A`;
-          option.items.forEach(optionItem => {
+          option.items.forEach((optionItem) => {
             message += `- ${optionItem.label}%0A`;
           });
         });
       }
-      
+
       if (item.message) {
         message += `  Comments: ${item.message}%0A`;
       }
     });
-    
+
     if (isToGo) {
-      priceWF=(total)+ 2;
+      priceWF = total + 2;
     } else {
-      priceWF=(total);
+      priceWF = total;
     }
     message += `%0ATotal: ${priceWF}€`;
     return message;
   };
-  
+
   const handleConfirm: SubmitHandler<FormInput> = async (data) => {
     const isCashValid = await trigger("cashValue");
     if (!isValid || (data.paymentMethod === "cash" && !isCashValid)) {
       return;
     }
-    
-    setUserName(data.name); 
+
+    setUserName(data.name);
     setUserPhone(parseFloat(data.phone));
     const message = formatWhatsAppMessage(data);
-    const whatsappLink = `https://wa.me/3002562050?text=${message}`;
-    window.open(whatsappLink, '_blank');
+    const whatsappLink = `https://wa.me/3015849730?text=${message}`;
+    window.open(whatsappLink, "_blank");
     setShowModalConfirm(true);
   };
-  
+
   const handleModalConfirmClose = () => {
     setShowModalConfirm(false);
     resetCart();
@@ -136,7 +150,13 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
 
   const handleCloseModal = () => {
     setShowModal(false);
-    reset({ name: "", phone: "", address: "", paymentMethod: "", cashValue: undefined });
+    reset({
+      name: "",
+      phone: "",
+      address: "",
+      paymentMethod: "",
+      cashValue: undefined,
+    });
   };
 
   const resetCart = () => {
@@ -159,7 +179,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
             ? {
                 ...item,
                 orderquantity: Math.max(0, item.orderquantity + delta),
-                
               }
             : item
         )
@@ -183,7 +202,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
         </div>
         <button
           className="absolute top-4 left-4 z-10"
-          onClick={() => setIsCartVisible (false)}
+          onClick={() => setIsCartVisible(false)}
         >
           <Image src={arrowleft} alt="Back" className="w-8 h-8" />
         </button>
@@ -255,7 +274,9 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                         </h4>
                         <div className="flex items-center justify-end space-x-2 w-full">
                           <button
-                            onClick={() => handleUpdateQuantity(product.idOrder, -1)}
+                            onClick={() =>
+                              handleUpdateQuantity(product.idOrder, -1)
+                            }
                             className="text-white bg-[#4A4A4A] px-2 rounded-full"
                           >
                             -
@@ -264,7 +285,9 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                             {product.orderquantity}
                           </span>
                           <button
-                            onClick={() => handleUpdateQuantity(product.idOrder, 1)}
+                            onClick={() =>
+                              handleUpdateQuantity(product.idOrder, 1)
+                            }
                             className="text-white bg-[#5A430B] px-1.5 rounded-full"
                           >
                             +
@@ -289,7 +312,10 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
               onClick={(e) => e.stopPropagation()}
             >
               <div className="">
-                <button onClick={handleCloseModal} className="text-black absolute top-5 right-5 text-3xl ">
+                <button
+                  onClick={handleCloseModal}
+                  className="text-black absolute top-5 right-5 text-3xl "
+                >
                   &times;
                 </button>
               </div>
@@ -298,13 +324,21 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
               </h2>
               <div className="flex justify-between mb-4">
                 <button
-                  className={`py-2 px-10 rounded-full ${!isToGo ? "bg-[#DEA001] text-white" : "bg-white text-[#DEA001] border-2 border-[#DEA001]"}`}
+                  className={`py-2 px-10 rounded-full ${
+                    !isToGo
+                      ? "bg-[#DEA001] text-white"
+                      : "bg-white text-[#DEA001] border-2 border-[#DEA001]"
+                  }`}
                   onClick={() => handleToGoChange(false)}
                 >
                   Table
                 </button>
                 <button
-                  className={`py-2 px-10 rounded-full ${isToGo ? "bg-[#DEA001] text-white" : "bg-white text-[#DEA001] border-2 border-[#DEA001]"}`}
+                  className={`py-2 px-10 rounded-full ${
+                    isToGo
+                      ? "bg-[#DEA001] text-white"
+                      : "bg-white text-[#DEA001] border-2 border-[#DEA001]"
+                  }`}
                   onClick={() => handleToGoChange(true)}
                 >
                   To go
@@ -312,7 +346,9 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
               </div>
               <form>
                 <div className="mb-4">
-                  <label className="font-semibold block text-[#4A4A4A]">Names</label>
+                  <label className="font-semibold block text-[#4A4A4A]">
+                    Names
+                  </label>
                   <input
                     type="text"
                     className="font-semibold w-full p-2 border rounded"
@@ -320,10 +356,16 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                     style={{ color: "#4A4A4A" }}
                     {...register("name", { required: "Name is required" })}
                   />
-                  {errors.name && <p className="font-semibold text-gray-600">{errors.name.message}</p>}
+                  {errors.name && (
+                    <p className="font-semibold text-gray-600">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mb-4">
-                  <label className="font-semibold block text-[#4A4A4A]">Phone</label>
+                  <label className="font-semibold block text-[#4A4A4A]">
+                    Phone
+                  </label>
                   <input
                     type="text"
                     className="font-semibold w-full p-2 border rounded"
@@ -337,48 +379,76 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                       },
                     })}
                   />
-                  {errors.phone && <p className="font-semibold text-gray-600">{errors.phone.message}</p>}
+                  {errors.phone && (
+                    <p className="font-semibold text-gray-600">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
                 {isToGo && (
                   <div className="mb-4">
-                    <label className="font-semibold block text-[#4A4A4A]">Address</label>
+                    <label className="font-semibold block text-[#4A4A4A]">
+                      Address
+                    </label>
                     <input
                       type="text"
                       className="font-semibold w-full p-2 border rounded"
                       placeholder="Ex: Los cortijos"
                       style={{ color: "#4A4A4A" }}
-                      {...register("address", { required: "Address is required" })}
+                      {...register("address", {
+                        required: "Address is required",
+                      })}
                     />
-                    {errors.address && <p className="font-semibold text-gray-600">{errors.address.message}</p>}
+                    {errors.address && (
+                      <p className="font-semibold text-gray-600">
+                        {errors.address.message}
+                      </p>
+                    )}
                   </div>
                 )}
                 <div className="mb-4">
-                  <label className="font-semibold block text-[#4A4A4A]">Method of payment</label>
+                  <label className="font-semibold block text-[#4A4A4A]">
+                    Method of payment
+                  </label>
                   <div className="flex items-center space-x-4 pt-3">
                     <label className="flex items-center">
                       <input
                         type="radio"
                         className="mr-2 accent-[#DEA001]"
                         value="cash"
-                        {...register("paymentMethod", { required: "Payment method is required" })}
+                        {...register("paymentMethod", {
+                          required: "Payment method is required",
+                        })}
                       />
-                      <span className="font-semibold text-[#4A4A4A]">Payment in cash</span>
+                      <span className="font-semibold text-[#4A4A4A]">
+                        Payment in cash
+                      </span>
                     </label>
                     <label className="flex items-center">
                       <input
                         type="radio"
                         className="mr-2 accent-[#DEA001]"
                         value="transfer"
-                        {...register("paymentMethod", { required: "Payment method is required" })}
+                        {...register("paymentMethod", {
+                          required: "Payment method is required",
+                        })}
                       />
-                      <span className="font-semibold text-[#4A4A4A]">Transfer</span>
+                      <span className="font-semibold text-[#4A4A4A]">
+                        Transfer
+                      </span>
                     </label>
                   </div>
-                  {errors.paymentMethod && <p className="font-semibold text-gray-600">{errors.paymentMethod.message}</p>}
+                  {errors.paymentMethod && (
+                    <p className="font-semibold text-gray-600">
+                      {errors.paymentMethod.message}
+                    </p>
+                  )}
                 </div>
                 {watch("paymentMethod") === "cash" && (
                   <div className="mb-4">
-                    <label className="font-semibold block text-[#4A4A4A]">Cash value</label>
+                    <label className="font-semibold block text-[#4A4A4A]">
+                      Cash value
+                    </label>
                     <input
                       type="number"
                       className="font-semibold w-full p-2 border rounded"
@@ -388,11 +458,15 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
                         required: "Cash value is required",
                         min: {
                           value: total,
-                          message: `Cash value must be greater than or equal to $${total}`
-                        }
+                          message: `Cash value must be greater than or equal to $${total}`,
+                        },
                       })}
                     />
-                    {errors.cashValue && <p className="font-semibold text-gray-600">{errors.cashValue.message}</p>}
+                    {errors.cashValue && (
+                      <p className="font-semibold text-gray-600">
+                        {errors.cashValue.message}
+                      </p>
+                    )}
                   </div>
                 )}
                 <div className="flex justify-end">
@@ -414,12 +488,12 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
             Go to WhatsApp chat"
             type="order"
             onClose={handleModalConfirmClose}
-            onClick={() => handleModalConfirmClose()}            
+            onClick={() => handleModalConfirmClose()}
           />
         )}
         {showStarRating && (
           <StarRating
-            name={userName}  
+            name={userName}
             phone={userPhone}
             onClose={handleModalRatingClose}
           />
