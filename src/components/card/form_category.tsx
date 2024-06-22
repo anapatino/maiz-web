@@ -92,6 +92,15 @@ const FormCategory: React.FC<isVisible> = ({
     onClose();
     reset();
     removeOption();
+
+    const visibilityState = {
+      loading: false,
+      success: false,
+      error: false,
+      warning: false,
+    };
+    setIsVisibleEdit(visibilityState);
+    setIsVisible(visibilityState);
   };
 
   const onSubmit = async (data: Category) => {
@@ -283,7 +292,7 @@ const FormCategory: React.FC<isVisible> = ({
           </div>
           <div className="flex justify-end">
             <button
-              className={`rounded-full py-2 px-4 mt-4 ${
+              className={`rounded-full py-2 px-4 mt-4 transform transition duration-300  hover:scale-105 ${
                 !isValid || isVisible.loading || isVisibleEdit.loading
                   ? "bg-gray-500 cursor-not-allowed"
                   : "bg-[#DEA001] text-white"
