@@ -488,9 +488,11 @@ export default function Menu() {
                                 )}
                               </Disclosure.Button>
                               <Disclosure.Panel className="">
-                                <label className="text-medium">{option.description}</label>
+                                <div className="px-4">
+                                  <label className="text-medium">{option.description}</label>
+                                </div>
                                 {option.items.map((item, itemIndex) => (
-                                  <div key={itemIndex} className="mt-2">
+                                  <div key={itemIndex} className="mt-2 px-4">
                                     <label className="flex items-center">
                                       <input
                                         type="checkbox"
@@ -572,23 +574,8 @@ export default function Menu() {
                   <h1 className="text-lg mt-2">{calculateTotalPrice()}€</h1>
                   
                   <div className="overflow-y-auto h-[145px]">
-                    <Disclosure>
-                      {({ open }) => (
-                        <>
-                          <Disclosure.Button className="flex justify-between w-full px-4 py-1 font-medium text-left text-medium bg-black rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                            <h4 className="text-medium font-bold">Description</h4>
-                            {open ? (
-                              <ChevronUpIcon className="w-5 h-5" />
-                            ) : (
-                              <ChevronDownIcon className="w-5 h-5" />
-                            )}
-                          </Disclosure.Button>
-                          <Disclosure.Panel className="">
-                            <label className="text-medium">{selectedProduct?.description}</label>
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure>
+                    <h4 className="text-medium font-bold">Description</h4>
+                    <label className="text-medium">{selectedProduct?.description}</label>
                     {selectedProduct?.options.map((option, index) => (
                       <Disclosure key={index}>
                         {({ open }) => (
@@ -602,9 +589,11 @@ export default function Menu() {
                               )}
                             </Disclosure.Button>
                             <Disclosure.Panel className="">
-                              <label className="text-medium">{option.description}</label>
+                              <div className="px-4">
+                                <label className="text-medium">{option.description}</label>
+                              </div>
                               {option.items.map((item, itemIndex) => (
-                                <div key={itemIndex} className="mt-2">
+                                <div key={itemIndex} className="mt-2 px-4">
                                   <label className="flex items-center">
                                     <input
                                       type="checkbox"

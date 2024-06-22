@@ -7,7 +7,7 @@ import facebook from "../../../public/svg/footer/facebook.svg";
 
 export default function FooterMain() {
   return (
-    <div className="w-full overflow-hidden relative z-10 mt-6">
+    <div className="w-full h-full overflow-hidden relative z-10 mt-6">
       <Image
         src={bg_footer}
         alt="footer"
@@ -17,13 +17,13 @@ export default function FooterMain() {
       <div className="max-phone:hidden">
         <div className="absolute bottom-[20%] h-[30%] left-0 right-0 flex justify-center items-center">
           <div className="absolute left-[15%] ">
-            <Image src={maiz_white} alt="Maiz" className="w-32 h-auto" />
+            <Image src={maiz_white} alt="Maiz" className="w-32 h-auto"/>
           </div>
           <div className="flex justify-center items-center gap-8">
             <a href="" className="w-10">
               <Image src={facebook} alt="Facebook" width={50} />
             </a>
-            <a href="">
+            <a href="https://www.instagram.com/maizmalta">
               <Image src={instagram} alt="Instagram" width={40} />
             </a>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import car from "../../../public/svg/shoppingcart/car.svg";
 import arrowleft from "../../../public/svg/arrows/arrow_left.svg";
@@ -58,6 +58,18 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
 
   const { register, handleSubmit, formState: { errors, isValid }, reset, watch, trigger} = useForm<FormInput>({ mode: "onChange" });
 
+  useEffect(() => {
+    if (isVisible) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [isVisible]);
+
 
   const handleToGoChange = (toGo: boolean) => {
     setIsToGo(toGo);
@@ -92,15 +104,17 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
       
       if (item.options && item.options.length > 0) {
         item.options.forEach(option => {
-          message += `Option: ${option.label}%0A`;
-          option.items.forEach(optionItem => {
-            message += `- ${optionItem.label}%0A`;
-          });
+          if (option.items.length > 0){
+            message += `Option: ${option.label}%0A`;
+            option.items.forEach(optionItem => {
+              message += `- ${optionItem.label}%0A`;
+            });
+          }
         });
       }
       
       if (item.message) {
-        message += `  Comments: ${item.message}%0A`;
+        message += `Comments: ${item.message}%0A`;
       }
     });
     
@@ -172,7 +186,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ cart, updateQuantityPage, r
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+    <div className="fixed w-full h-full inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
       <div className="relative w-full h-full mx-auto bg-black overflow-auto flex flex-col min-h-screen">
         <div className="w-full relative z-10 flex justify-center items-center p-32 max-phone:pt-16 max-phone:pb-10 max-phone:px-16 pb-10">
           <div className="text-center">

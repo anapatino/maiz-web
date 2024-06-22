@@ -6,12 +6,12 @@ import Link from 'next/link';
 
 export default function FooterMenu() {
   return (
-    <footer className="bg-black bg-opacity-75 py-8 w-full">
+    <footer className="bg-black bg-opacity-75 py-4 w-full mt-auto">
       <div className="w-full overflow-hidden relative">
         <div className="bg-transparent">
           <div className="hidden max-phone:flex flex-col justify-center items-center p-4">
             <Image src={maiz_yellow} alt="Maiz" className="h-10 mb-4" />
-            <div className="flex flex-col items-center space-y-2 text-xl">
+            <div className="text-center items-center space-x-8">
               <Link href="/" className="text-[#FCCC00] cursor-pointer">
                 <label>Home</label>
               </Link>
@@ -26,7 +26,7 @@ export default function FooterMenu() {
               <a href="" target="_blank" className="">
                 <Image src={facebook} alt="Facebook" width={30} className="svg-color" />
               </a>
-              <a href="" target="_blank" className="">
+              <a href="https://www.instagram.com/maizmalta" target="_blank" className="">
                 <Image src={instagram} alt="Instagram" width={30} className="svg-color" />
               </a>
             </div>
