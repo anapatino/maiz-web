@@ -118,10 +118,12 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
       if (item.options && item.options.length > 0) {
         item.options.forEach(option => {
-          message += `Option: ${option.label}%0A`;
-          option.items.forEach(optionItem => {
-            message += `- ${optionItem.label}%0A`;
-          });
+          if (option.items.length > 0){
+            message += `Option: ${option.label}%0A`;
+            option.items.forEach(optionItem => {
+              message += `- ${optionItem.label}%0A`;
+            });
+          }
         });
       }
 
