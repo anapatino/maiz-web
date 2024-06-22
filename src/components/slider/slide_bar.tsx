@@ -43,15 +43,18 @@ const SlideBar: React.FC = () => {
               width={24}
               height={24}
             />
-            <h4 className="text-lg font-bold tracking-wider">{item.label}</h4>
+            <h4 className="text-lg font-bold tracking-wider  max-w-[1030px]:text-base">
+              {item.label}
+            </h4>
           </button>
         ))}
       </div>
       <div className="absolute bottom-0 mb-4 w-[80%]">
         <button
           className="flex justify-start"
-          onClick={() => {navigateTo("login");
-            localStorage.removeItem('user_email');
+          onClick={() => {
+            navigateTo("login");
+            localStorage.removeItem("user_email");
           }}
         >
           <Image src={dooropenfill} alt="Product Icon" width={24} height={24} />

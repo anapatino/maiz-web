@@ -542,7 +542,7 @@ export default function Product() {
                             padding="none"
                             className=""
                           >
-                            <div className="flex w-[90px] justify-between items-center gap-2">
+                            <div className="flex w-[90px] justify-between items-center gap-2 mr-4">
                               <button
                                 onClick={() => {
                                   setView(true);
