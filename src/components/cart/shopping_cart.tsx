@@ -85,7 +85,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
 
   const formatWhatsAppMessage = (data: FormInput) => {
     let priceWF = 0;
-    let message = "Order Details:%0A%0A";
+    let message = "👋🏻Order Details:%0A%0A";
     message += `Name: ${data.name}%0A`;
     message += `Phone: ${data.phone}%0A`;
     message += `Order Type: ${isToGo ? "To go" : "Table"}%0A`;

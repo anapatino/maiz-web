@@ -54,7 +54,10 @@ const Modal: React.FC<types> = ({ title, message, type, onClose, onClick }) => {
         )}
         {type === "order" && (
           <div>
-              <i className="bi bi-check-circle-fill text-accent"  style={{ fontSize: "3.5rem" }}></i>
+            <i
+              className="bi bi-check-circle-fill text-accent"
+              style={{ fontSize: "3.5rem" }}
+            ></i>
             <h4 className="text-xl mb-2 font-semibold text-accent">{title}</h4>
           </div>
         )}
@@ -72,14 +75,14 @@ const Modal: React.FC<types> = ({ title, message, type, onClose, onClick }) => {
         {type === "delete" && (
           <div className="flex justify-between mt-4">
             <button
-              className="bg-white text-grayLabel font-semibold rounded px-4 py-2 "
+              className="bg-white text-grayLabel font-semibold rounded px-4 py-2  transform transition duration-300  hover:scale-105"
               onClick={onClose}
             >
               <h4>Back</h4>
             </button>
             <button
               onClick={onClick}
-              className="bg-danger font-semibold text-white rounded px-4 py-2 "
+              className="bg-danger font-semibold text-white rounded px-4 py-2 transform transition duration-300 hover:bg-red-700 hover:scale-105"
             >
               <h4>Continue</h4>
             </button>

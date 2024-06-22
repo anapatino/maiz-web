@@ -510,7 +510,9 @@ export default function Product() {
                             padding="none"
                             className="text-white text-[15px]"
                           >
-                            <h4>{row.price}</h4>
+                            <h4 className="text-white text-[15px]">
+                              {row.price}
+                            </h4>
                           </TableCell>
                           <TableCell
                             component="th"
@@ -518,7 +520,9 @@ export default function Product() {
                             padding="none"
                             className="text-white text-[15px]"
                           >
-                            <h4>{row.labelCategory}</h4>
+                            <h4 className="text-white text-[15px]">
+                              {row.labelCategory}
+                            </h4>
                           </TableCell>
                           <TableCell
                             component="th"
@@ -527,7 +531,7 @@ export default function Product() {
                             align="left"
                             className="text-white text-[15px]"
                           >
-                            <h4 className="pl-8">
+                            <h4 className="pl-8 text-white text-[15px]">
                               {row.available === true ? "Yes" : "No"}
                             </h4>
                           </TableCell>
@@ -580,6 +584,7 @@ export default function Product() {
                     {emptyRows > 0 && (
                       <TableRow
                         style={{
+                          color: "#ffffff",
                           height: (dense ? 33 : 53) * emptyRows,
                         }}
                       >
