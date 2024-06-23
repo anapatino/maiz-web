@@ -70,18 +70,14 @@ const FormProduct: React.FC<isVisible> = ({
   const handleClose = () => {
     setMessageError("");
     setImagePreviewUrl(null);
-    setIsVisibleEdit({
+    const visibilityState = {
       loading: false,
       success: false,
       error: false,
       warning: false,
-    });
-    setIsVisible({
-      loading: false,
-      success: false,
-      error: false,
-      warning: false,
-    });
+    };
+    setIsVisibleEdit(visibilityState);
+    setIsVisible(visibilityState);
     onClose();
     reset();
   };
@@ -320,7 +316,7 @@ const FormProduct: React.FC<isVisible> = ({
           </div>
           <div className="flex justify-end">
             <button
-              className={`rounded-full py-2 px-4 mt-4 ${
+              className={`rounded-full py-2 px-4 mt-4 transform transition duration-300  hover:scale-105 ${
                 !isValid || isVisible.loading || isVisibleEdit.loading
                   ? "bg-gray-500 cursor-not-allowed"
                   : "bg-[#DEA001] text-white"

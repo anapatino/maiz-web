@@ -180,8 +180,12 @@ input {
 
 .truncate-multiline {
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* Cambia el número 2 por la cantidad de líneas que quieras mostrar antes del truncado */
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.no-scroll {
+  overflow: hidden;
 }

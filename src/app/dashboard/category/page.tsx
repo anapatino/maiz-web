@@ -489,7 +489,7 @@ export default function Category() {
                             </div>
                           </TableCell>
                           <TableCell align="left" className="text-center">
-                            <div className="flex w-[50px] justify-between items-center gap-4">
+                            <div className="flex w-[50px] justify-between items-center gap-4 ml-2">
                               <button
                                 onClick={() => {
                                   setIsEdit(true);

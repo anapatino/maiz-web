@@ -2,9 +2,10 @@ import React from 'react';
 
 interface SearchBarProps {
   onChange: (query: string) => void;
+  onClose: () => void; // Nueva prop para manejar el cierre de la barra
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onChange }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onChange, onClose }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -16,7 +17,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onChange }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="h-6 w-6 text-[#DEA001] absolute left-3 top-2.5 max-phone:top-[2px]"
+          className="h-6 w-6 max-phone:h-5 max-phone:w-5 text-[#DEA001] absolute left-3 top-2.5 max-phone:top-[4px] cursor-pointer"
+          onClick={onClose} // Llama a la función onClose cuando se hace clic en la lupa
         >
           <path
             fillRule="evenodd"
