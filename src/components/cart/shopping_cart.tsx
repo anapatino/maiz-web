@@ -205,8 +205,8 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   };
 
   return (
-    <div className="fixed w-full h-full inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="relative w-full h-full mx-auto bg-black overflow-auto flex flex-col min-h-screen">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+      <div className="relative w-full mx-auto bg-black overflow-auto flex flex-col min-h-screen">
         <div className="w-full relative z-10 flex justify-center items-center p-32 max-phone:pt-16 max-phone:pb-10 max-phone:px-16 pb-10">
           <div className="text-center">
             <h3 className="text-9xl max-tablet:text-7xl max-phone:text-5xl">
