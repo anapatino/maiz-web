@@ -99,28 +99,28 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   const formatWhatsAppMessage = (data: FormInput) => {
     let priceWF = 0;
     let message = "👋🏻Order Details:%0A%0A";
-    message += `Name: ${data.name}%0A`;
-    message += `Phone: ${data.phone}%0A`;
-    message += `Order Type: ${isToGo ? "To go" : "Table"}%0A`;
+    message += `👤 Name: ${data.name}%0A`;
+    message += `📞 Phone: ${data.phone}%0A`;
+    message += `🛒 Order Type: ${isToGo ? "To go" : "Table"}%0A`;
 
     if (isToGo) {
-      message += `Address: ${data.address}%0A`;
+      message += `🏠 Address: ${data.address}%0A`;
     }
 
-    message += `Payment Method: ${data.paymentMethod}%0A`;
+    message += `💳 Payment Method: ${data.paymentMethod}%0A`;
 
     if (data.paymentMethod === "cash") {
-      message += `Cash Value: ${data.cashValue}%0A`;
+      message += `💶 Cash Value: ${data.cashValue}%0A`;
     }
 
     message += "%0AProducts:%0A";
     items.forEach((item) => {
-      message += `%0A--> ${item.name} - Quantity: ${item.orderquantity} - Price: ${item.price}€ %0A`;
+      message += `%0A➡️ ${item.name} - 🔢 Quantity: ${item.orderquantity} - Price: ${item.price}€ %0A`;
 
       if (item.options && item.options.length > 0) {
         item.options.forEach(option => {
           if (option.items.length > 0){
-            message += `Option: ${option.label}%0A`;
+            message += `🔘 Option: ${option.label}%0A`;
             option.items.forEach(optionItem => {
               message += `- ${optionItem.label}%0A`;
             });
@@ -129,7 +129,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
       }
 
       if (item.message) {
-        message += `Comments: ${item.message}%0A`;
+        message += `💬 Comments: ${item.message}%0A`;
       }
     });
 
@@ -138,7 +138,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     } else {
       priceWF = total;
     }
-    message += `%0ATotal: ${priceWF}€`;
+    message += `%0A💰 Total: ${priceWF}€`;
     return message;
   };
 
