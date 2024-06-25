@@ -576,7 +576,7 @@ export default function Menu() {
                   <div className="overflow-y-auto h-[145px]">
                     <h4 className="text-medium font-bold">Description</h4>
                     <label className="text-medium">{selectedProduct?.description}</label>
-                    {selectedProduct?.options.map((option, index) => (
+                    {selectedCategory?.options.map((option, index) => (
                       <Disclosure key={index}>
                         {({ open }) => (
                           <>
