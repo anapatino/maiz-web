@@ -58,6 +58,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   const [showStarRating, setShowStarRating] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("");
   const [userPhone, setUserPhone] = useState<number>(0);
+  const deliveryCost = 2;
 
   const {
     register,
@@ -133,7 +134,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     });
 
     if (isToGo) {
-      priceWF = total + 2;
+      priceWF = total + deliveryCost ;
     } else {
       priceWF = total;
     }
@@ -459,30 +460,58 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
                   )}
                 </div>
                 {watch("paymentMethod") === "cash" && (
-                  <div className="mb-4">
-                    <label className="font-semibold block text-[#4A4A4A]">
-                      Cash value
-                    </label>
-                    <input
-                      type="number"
-                      className="font-semibold w-full p-2 border rounded"
-                      placeholder="Ex: 5"
-                      style={{ color: "#4A4A4A" }}
-                      {...register("cashValue", {
-                        required: "Cash value is required",
-                        min: {
-                          value: total,
-                          message: `Cash value must be greater than or equal to $${total}`,
-                        },
-                      })}
-                    />
-                    {errors.cashValue && (
-                      <p className="font-semibold text-gray-600">
-                        {errors.cashValue.message}
-                      </p>
-                    )}
-                  </div>
-                )}
+                <>
+                  {isToGo ? (
+                    <div className="mb-4">
+                      <label className="font-semibold block text-[#4A4A4A]">
+                        Cash value
+                      </label>
+                      <input
+                        type="number"
+                        className="font-semibold w-full p-2 border rounded"
+                        placeholder="Ex: 5"
+                        style={{ color: "#4A4A4A" }}
+                        {...register("cashValue", {
+                          required: "Cash value is required",
+                          min: {
+                            value: total + deliveryCost,
+                            message: `Cash value must be greater than or equal to ${total}€ plus delivery costs of ${deliveryCost}€ euros.`,
+                          },
+                        })}
+                      />
+                      {errors.cashValue && (
+                        <p className="font-semibold text-gray-600">
+                          {errors.cashValue.message}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="mb-4">
+                      <label className="font-semibold block text-[#4A4A4A]">
+                        Cash value
+                      </label>
+                      <input
+                        type="number"
+                        className="font-semibold w-full p-2 border rounded"
+                        placeholder="Ex: 5"
+                        style={{ color: "#4A4A4A" }}
+                        {...register("cashValue", {
+                          required: "Cash value is required",
+                          min: {
+                            value: total,
+                            message: `Cash value must be greater than or equal to $${total}`,
+                          },
+                        })}
+                      />
+                      {errors.cashValue && (
+                        <p className="font-semibold text-gray-600">
+                          {errors.cashValue.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
                 <div className="flex justify-end">
                   <button
                     onClick={handleSubmit(handleConfirm)}
