@@ -277,7 +277,7 @@ export default function Menu() {
   const calculateTotalPrice = () => {
     let total = parseFloat(selectedProduct?.price || "0") * quantityA;
   
-    selectedProduct?.options.forEach(option => {
+    selectedCategory?.options.forEach(option => {
       const selectedItemLabel = selectedOptions[option.label];
       const selectedItem = option.items.find(item => item.label === selectedItemLabel);
       if (selectedItem) {
@@ -373,19 +373,20 @@ export default function Menu() {
             {filteredProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center flex-1 p-4">
                 {selectedCategory?.image ? (
-                  <div className=" w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px]">
-                    <Image
-                      src={selectedCategory.image}
-                      alt={selectedCategory.name || 'Category image'}
-                      className="p-3 max-phone:p-4"
-                      width={110}
-                      height={110}
-                    />
+                  <div className="mx-auto w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px] flex items-center justify-center overflow-hidden">
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={selectedCategory.image}
+                        alt={selectedCategory.name || 'Category image'}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
                   </div>
                 ) : (
                   <div className="p-6 max-phone:p-5" style={{ width: 110, height: 110 }} />
                 )}
-                <h2 className="mb-4 text-3xl text-center">
+                <h2 className="my-4 text-3xl text-center">
                   We have no products in the {selectedCategory?.name || 'this category'} category.
                 </h2>
               </div>

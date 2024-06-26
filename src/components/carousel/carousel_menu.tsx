@@ -59,9 +59,9 @@ export default function CarouselMenu({ onCategorySelect }: CarouselMenuProps) {
   const settings = {
     dots: false,
     arrows: true,
-    infinite: true,
+    infinite: categories.length > 1,
     speed: 750,
-    slidesToShow: 6,
+    slidesToShow: Math.min(6, categories.length),
     slidesToScroll: 1,
     prevArrow: <CustomArrowLeft />,
     nextArrow: <CustomArrowRight />,
@@ -70,21 +70,21 @@ export default function CarouselMenu({ onCategorySelect }: CarouselMenuProps) {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: Math.min(4, categories.length),
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 900,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: Math.min(3, categories.length),
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 550,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: Math.min(3, categories.length),
           slidesToScroll: 1,
         },
       },
@@ -93,26 +93,36 @@ export default function CarouselMenu({ onCategorySelect }: CarouselMenuProps) {
 
   return (
     <div className="w-[70%] mx-auto relative">
-      <Slider {...settings}>
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="text-center relative cursor-pointer"
-            onClick={() => onCategorySelect(category)} // Pasar el objeto completo de la categoría
-          >
-            <div className="mx-auto rounded-full bg-[#5A430B] w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px]">
-              <Image
-                src={category.image}
-                alt={category.name}
-                className="p-6 max-phone:p-5"
-                width={110}
-                height={110}
-              />
+      {categories.length > 0 ? (
+        <Slider {...settings}>
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className="text-center relative cursor-pointer"
+              onClick={() => onCategorySelect(category)}
+            >
+              <div className="mx-auto rounded-full bg-[#5A430B] w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px] flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="p-6 max-phone:p-5"
+                  />
+                </div>
+              </div>
+              <h4 className="text-[18px] pt-[6px] max-phone:text-[14px] max-tablet:text-[15px]">{category.name}</h4>
             </div>
-            <h4 className="text-[18px] pt-[6px] max-phone:text-[14px] max-tablet:text-[15px]">{category.name}</h4>
-          </div>
-        ))}
-      </Slider>
+          ))}
+        </Slider>
+      ) : (
+        <div className="flex flex-col items-center justify-center flex-1 p-4">
+          <h2 className="mb-4 text-3xl text-center">
+            No categories available.
+          </h2>
+        </div>
+      )}
     </div>
   );
 }
