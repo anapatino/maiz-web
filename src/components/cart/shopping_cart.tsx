@@ -500,7 +500,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
                           required: "Cash value is required",
                           min: {
                             value: total,
-                            message: `Cash value must be greater than or equal to $${total}`,
+                            message: `Cash value must be greater than or equal to ${total}€`,
                           },
                         })}
                       />

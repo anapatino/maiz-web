@@ -45,7 +45,7 @@ const DetailsProduct: React.FC<isVisible> = ({ isOpen, onClose, product }) => {
             <button onClick={handleClose}>&times;</button>
           </div>
           <h1 className="text-2xl mt-6 text-primary">{product.name}</h1>
-          <h1 className="text-xl my-2 text-primary">${product.price}€</h1>
+          <h1 className="text-xl my-2 text-primary">{product.price}€</h1>
           <h4 className="text-lg font-bold">Description</h4>
           <label className="text-lg">{product.description}</label>
           <div className="w-[430px] h-[330px] pl-1 overflow-y-auto overflow-x-hidden">
