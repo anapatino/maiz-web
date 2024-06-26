@@ -31,7 +31,7 @@ const FormProduct: React.FC<isVisible> = ({
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm<ProductResponse>({
+  } = useForm<Product>({
     mode: "onChange",
   });
   const [messageError, setMessageError] = useState<string>("");
@@ -82,7 +82,7 @@ const FormProduct: React.FC<isVisible> = ({
     reset();
   };
 
-  const onSubmit = async (data: ProductResponse) => {
+  const onSubmit = async (data: Product) => {
     setIsVisible({
       loading: true,
       success: false,
@@ -100,12 +100,11 @@ const FormProduct: React.FC<isVisible> = ({
     }
 
     try {
-      const selectedCategory = categories.find(
-        (category) => category.id === data.idCategory
+      const selectedProduct = categories.find(
+        (product) => product.id === data.idCategory
       );
-      if (selectedCategory) {
-        data.options = selectedCategory.options;
-        data.labelCategory = selectedCategory.name;
+      if (selectedProduct) {
+        data.labelCategory = selectedProduct.name;
         const boolean = data.available.toString() === "true" ? true : false;
         data.available = boolean;
       }
