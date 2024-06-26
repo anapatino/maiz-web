@@ -97,6 +97,8 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     return sum + parseFloat(item.price) * item.orderquantity;
   }, 0);
 
+  const roundedTotal = Math.round(total * 100) / 100;
+
   const formatWhatsAppMessage = (data: FormInput) => {
     let priceWF = 0;
     let message = "👋🏻Order Details:%0A%0A";
@@ -135,9 +137,9 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     });
 
     if (isToGo) {
-      priceWF = total + deliveryCost ;
+      priceWF = roundedTotal + deliveryCost ;
     } else {
-      priceWF = total;
+      priceWF = roundedTotal;
     }
     message += `%0A💰 Total: ${priceWF}€`;
     return message;
@@ -245,7 +247,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
           <div className="w-[100%]">
             <div className="flex justify-center items-center mb-4">
               <h1 className="text-4xl max-phone:text-2xl max-tablet:text-3xl">
-                TOTAL: €{total}{" "}
+                TOTAL: €{roundedTotal}{" "}
               </h1>
             </div>
 
