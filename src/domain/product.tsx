@@ -1,5 +1,4 @@
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
-import { Options } from "./options";
 
 export interface Product {
   id: string;
@@ -18,7 +17,6 @@ export interface ProductResponse {
   description: string;
   price: string;
   image: string;
-  options: Options[];
   idCategory: string;
   labelCategory: string;
   available: boolean;
@@ -33,7 +31,6 @@ export function mapDocToProduct(
     description: doc.data().description,
     price: doc.data().price,
     image: doc.data().image,
-    options: doc.data().options,
     idCategory: doc.data().idCategory,
     labelCategory: doc.data().labelCategory,
     available: doc.data().available,
