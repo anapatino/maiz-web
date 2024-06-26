@@ -1,4 +1,9 @@
-import { ProductResponse, mapDocToProduct } from "@/domain/product";
+import {
+  Product,
+  ProductResponse,
+  mapDocToProduct,
+  mapDocToProductResponse,
+} from "@/domain/product";
 import { database } from "@/lib/firebase";
 import {
   collection,
@@ -18,29 +23,35 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import { CategoryRequest } from "./category_request";
 
 export class ProductRequest {
   public static async getAllProducts(): Promise<ProductResponse[]> {
-    return this.fetchProducts((doc) => true);
+    const categories = await CategoryRequest.getAllCategories();
+    const products = await this.fetchProducts((doc) => true);
+    
+    return products.map(product => {
+      const category = categories.find(cat => cat.id === product.idCategory);
+      return mapDocToProductResponse(product, category ? category.options : []);
+    });
   }
 
-  public static async getProductById(
-    id: string
-  ): Promise<ProductResponse | null> {
+  public static async getProductById(id: string): Promise<Product | null> {
     const products = await this.fetchProducts((doc) => doc.id === id);
+
     return products.length > 0 ? products[0] : null;
   }
 
   public static async getProductsByCategory(
     idCategory: string
-  ): Promise<ProductResponse[]> {
+  ): Promise<Product[]> {
     return this.fetchProducts((doc) => doc.data().idCategory === idCategory);
   }
 
   private static async fetchProducts(
     filter: (doc: QueryDocumentSnapshot<DocumentData>) => boolean
-  ): Promise<ProductResponse[]> {
-    const products: ProductResponse[] = [];
+  ): Promise<Product[]> {
+    const products: Product[] = [];
     try {
       const productsCollection = await getDocs(
         collection(database, "products")
@@ -57,7 +68,7 @@ export class ProductRequest {
   }
 
   public static async addProduct(
-    newProduct: ProductResponse,
+    newProduct: Product,
     imageBase64: string
   ): Promise<string> {
     try {
@@ -77,7 +88,7 @@ export class ProductRequest {
 
   public static async updateProduct(
     id: string,
-    updatedProduct: Partial<ProductResponse>,
+    updatedProduct: Partial<Product>,
     newImageBase64: string
   ): Promise<string> {
     try {
@@ -112,7 +123,7 @@ export class ProductRequest {
       const productDocRef = doc(database, "products", id);
       const productDoc = await getDoc(productDocRef);
       if (productDoc.exists()) {
-        const productData = productDoc.data() as ProductResponse;
+        const productData = productDoc.data() as Product;
         if (productData.image) {
           await this.deleteImage(productData.image);
         }

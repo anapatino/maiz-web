@@ -1,4 +1,4 @@
-import { ProductResponse } from "@/domain/product";
+import { Product, ProductResponse } from "@/domain/product";
 import { ProductRequest } from "../repository/product_request";
 
 export class ProductController {
@@ -12,7 +12,7 @@ export class ProductController {
 
   public static async getProductById(
     productId: string
-  ): Promise<ProductResponse | null> {
+  ): Promise<Product | null> {
     try {
       return await ProductRequest.getProductById(productId);
     } catch (error) {
@@ -22,7 +22,7 @@ export class ProductController {
 
   public static async getProductsByCategory(
     idCategory: string
-  ): Promise<ProductResponse[]> {
+  ): Promise<Product[]> {
     try {
       return await ProductRequest.getProductsByCategory(idCategory);
     } catch (error) {
@@ -31,7 +31,7 @@ export class ProductController {
   }
 
   public static async addProduct(
-    newProduct: ProductResponse,
+    newProduct: Product,
     image: string
   ): Promise<string> {
     try {
@@ -43,7 +43,7 @@ export class ProductController {
 
   public static async updateProduct(
     productId: string,
-    updatedProduct: Partial<ProductResponse>,
+    updatedProduct: Partial<Product>,
     image: string
   ): Promise<string> {
     try {
