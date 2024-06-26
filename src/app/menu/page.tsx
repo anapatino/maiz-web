@@ -174,12 +174,15 @@ export default function Menu() {
   const handleAdd = () => {
     if (selectedProduct) {
       let totalOrder = calculateTotalPrice();
-      const total = ""+totalOrder/quantityA;
-      const selectedOptionDetails = selectedProduct.options.map((option) => ({
-        ...option,
-        items: option.items.filter((item) => item.label === selectedOptions[option.label]),
-      }));
-
+      const total = (totalOrder / quantityA).toString();
+  
+      const selectedOptionDetails = selectedCategory
+        ? selectedCategory.options.map((option) => ({
+            ...option,
+            items: option.items.filter((item) => item.label === selectedOptions[option.label]),
+          }))
+        : [];
+  
       const productToAdd: ProductOnCart = {
         id: selectedProduct.id,
         name: selectedProduct.name,
@@ -194,16 +197,17 @@ export default function Menu() {
         idOrder: nextOrder,
         options: selectedOptionDetails,
       };
+  
       setCart((prevCart) => {
-        const existingItem = prevCart.find(item => item.id === productToAdd.id);
-        const checkComment = prevCart.find(item => item.message === productToAdd.message);
-        const checkOptions = prevCart.find(item => deepEqual(item.options, productToAdd.options));
-      
-        if (existingItem && checkComment && checkOptions) {
-          return prevCart.map(item =>
+        const existingItem = prevCart.find(
+          (item) => item.id === productToAdd.id && item.message === productToAdd.message && deepEqual(item.options, productToAdd.options)
+        );
+  
+        if (existingItem) {
+          return prevCart.map((item) =>
             item.id === productToAdd.id &&
             item.message === productToAdd.message &&
-            checkOptions
+            deepEqual(item.options, productToAdd.options)
               ? { ...item, orderquantity: item.orderquantity + productToAdd.orderquantity }
               : item
           );
@@ -211,7 +215,7 @@ export default function Menu() {
           return [...prevCart, productToAdd];
         }
       });
-      
+  
       setNextOrder(nextOrder + 1);
       closeModal();
     }
@@ -475,7 +479,7 @@ export default function Menu() {
                     <h4 className="text-medium font-bold">Description</h4>
                     <label className="text-medium">{selectedProduct.description}</label>
                     <div className="">
-                      {selectedProduct?.options.map((option, index) => (
+                      {selectedCategory?.options.map((option, index) => (
                         <Disclosure key={index}>
                           {({ open }) => (
                             <>
