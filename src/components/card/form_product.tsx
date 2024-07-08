@@ -271,7 +271,7 @@ const FormProduct: React.FC<isVisible> = ({
               className="w-full p-2 border rounded bg-black"
               placeholder="Write description"
               {...register("description", {
-                required: "Description is required",
+                required: false,
               })}
             />
             {errors.description && (
