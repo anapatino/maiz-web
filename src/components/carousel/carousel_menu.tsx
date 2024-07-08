@@ -108,7 +108,7 @@ export default function CarouselMenu({ onCategorySelect }: CarouselMenuProps) {
                     alt={category.name}
                     layout="fill"
                     objectFit="cover"
-                    className="p-6 max-phone:p-5"
+                    className=""
                   />
                 </div>
               </div>
