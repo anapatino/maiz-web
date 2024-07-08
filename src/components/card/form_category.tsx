@@ -463,7 +463,7 @@ const OptionField: React.FC<OptionFieldProps> = ({
         className="w-full p-2 border rounded bg-black"
         placeholder="Ex: Choose the drink"
         {...register(`options.${index}.description`, {
-          required: "Description is required",
+          required: false,
         })}
       />
       {errors.options?.[index]?.description?.message && (
