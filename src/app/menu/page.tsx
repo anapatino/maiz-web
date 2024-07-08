@@ -372,20 +372,6 @@ export default function Menu() {
           <div className="w-full h-auto">
             {filteredProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center flex-1 p-4">
-                {selectedCategory?.image ? (
-                  <div className="mx-auto w-[110px] h-[110px] max-tablet:w-[90px] max-tablet:h-[90px] max-phone:w-[70px] max-phone:h-[70px] flex items-center justify-center overflow-hidden">
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={selectedCategory.image}
-                        alt={selectedCategory.name || 'Category image'}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-6 max-phone:p-5" style={{ width: 110, height: 110 }} />
-                )}
                 <h2 className="my-4 text-3xl text-center">
                   We have no products in the {selectedCategory?.name || 'this category'} category.
                 </h2>
