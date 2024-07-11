@@ -1,47 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
-import Slider1 from "../../../public/images/home/slider1.jpg";
-import Slider2 from "../../../public/images/home/slider2.jpg";
-import Slider3 from "../../../public/images/home/slider3.jpg";
-import Slider4 from "../../../public/images/home/slider4.jpg";
-import Slider5 from "../../../public/images/home/slider5.jpg";
+import { HomeDetailsRequest } from "../../data/repository/home_details_request";
+import { Details } from "@/domain/home_details";
 
-export default function SliderHome() {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+const SliderHome: React.FC = () => {
+  const [details, setDetails] = useState<Details | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const handleMouseEnter = (index: any) => {
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const homeDetails = await HomeDetailsRequest.getHomeDetails();
+        setDetails(homeDetails);
+      } catch (error) {
+        console.error("Error fetching home details:", error);
+      }
+    };
+    fetchDetails();
+  }, []);
+
+  const handleMouseEnter = (index: number) => {
     setHoveredIndex(index);
   };
 
   const handleMouseLeave = () => {
     setHoveredIndex(null);
   };
-
-  const sliders = [
-    {
-      image: Slider1,
-      title: "Empanadas",
-    },
-    {
-      image: Slider2,
-      title: "Bandeja paisa",
-    },
-    {
-      image: Slider3,
-      title: "Buñuelos",
-    },
-    {
-      image: Slider4,
-      title: "Arroz de coco",
-    },
-    {
-      image: Slider5,
-      title: "Platanitos",
-    },
-  ];
 
   const settings = {
     dots: false,
@@ -79,33 +66,43 @@ export default function SliderHome() {
 
   return (
     <div className="w-[100%] my-6 max-tablet:my-2">
-      <Slider {...settings}>
-        {sliders.map((slider, index) => (
-          <div
-            key={index}
-            className="text-center relative"
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <Image
-              src={slider.image}
-              alt={`slider${index + 1}`}
-              width={300}
-              height={300}
-              className="mx-auto rounded-full w-[300px] h-[300px] max-tablet:w-[200px] max-tablet:h-[200px] max-phone:w-[150px] max-phone:h-[150px]"
-            />
-            {hoveredIndex === index && (
-              <div className="absolute inset-0 flex justify-center items-center">
-                <div className="rounded-full w-[300px] h-[300px] max-tablet:w-[200px] max-tablet:h-[200px] max-phone:w-[150px] max-phone:h-[150px]  backdrop-filter backdrop-blur-sm bg-white bg-opacity-0 flex justify-center items-center">
-                  <h1 className="text-white text-4xl max-tablet:text-2xl max-phone:text-lg">
-                    {slider.title}
-                  </h1>
+      {details ? (
+        <Slider {...settings}>
+          {details.images.map((image, index) => (
+            <div
+              key={index}
+              className="text-center relative"
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Image
+                src={image.url}
+                alt={image.title}
+                width={300}
+                height={300}
+                className="mx-auto rounded-full w-[300px] h-[300px] max-tablet:w-[200px] max-tablet:h-[200px] max-phone:w-[150px] max-phone:h-[150px]"
+              />
+              {hoveredIndex === index && (
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <div className="rounded-full w-[300px] h-[300px] max-tablet:w-[200px] max-tablet:h-[200px] max-phone:w-[150px] max-phone:h-[150px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-0 flex justify-center items-center">
+                    <h1 className="text-white text-4xl max-tablet:text-2xl max-phone:text-lg">
+                      {image.title}
+                    </h1>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </Slider>
+              )}
+            </div>
+          ))}
+        </Slider>
+      ) : (
+        <div className="text-center justify-center">
+          <h2 className="absolute text-4xl text-center w-[100%]">
+            Loading...
+          </h2>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default SliderHome;

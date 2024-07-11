@@ -7,6 +7,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import ModalConfirm from "@/components/card/modal";
 import { Options } from "@/domain/options";
 import StarRating from "../rating/star_rating";
+import { WhatsAppNumber, mapDocToWhatsAppNumber } from "../../domain/whatsapp_number";
+import { WhatsAppNumberRequest } from "@/data/repository/whatsapp_number_request";
 
 interface ProductOnCart {
   id: string;
@@ -59,6 +61,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
   const [userName, setUserName] = useState<string>("");
   const [userPhone, setUserPhone] = useState<number>(0);
   const deliveryCost = 2;
+  const [whatsAppNumber, setWhatsAppNumber] = useState<string>("");
 
   const {
     register,
@@ -80,6 +83,20 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
       document.body.classList.remove("no-scroll");
     };
   }, [isVisible]);
+
+  useEffect(() => {
+    const fetchWhatsAppNumber = async () => {
+      try {
+        const whatsappNumber = await WhatsAppNumberRequest.getWhatsAppNumber();
+        if (whatsappNumber) {
+          setWhatsAppNumber(whatsappNumber.number);
+        }
+      } catch (error) {
+        console.error('Error fetching WhatsApp number:', error);
+      }
+    };
+    fetchWhatsAppNumber();
+  }, []);
 
 
   const handleToGoChange = (toGo: boolean) => {
@@ -154,7 +171,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     setUserName(data.name);
     setUserPhone(parseFloat(data.phone));
     const message = formatWhatsAppMessage(data);
-    const whatsappLink = `https://wa.me/3015849730?text=${message}`;
+    const whatsappLink = `https://wa.me/${whatsAppNumber}?text=${message}`;
     window.open(whatsappLink, "_blank");
     setShowModalConfirm(true);
   };
