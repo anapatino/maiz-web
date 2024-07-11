@@ -17,6 +17,7 @@ import { Details } from "@/domain/home_details";
 export default function Home() {
 
   const [details, setDetails] = useState<Details | null>(null);
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -110,7 +111,9 @@ export default function Home() {
         <table className="w-[40%] mt-8 text-xl max-phone:mt-4 max-phone:text-base max-tablet:w-[65%] max-phone:w-[80%]">
           <tbody className="justify-center items-center">
             {details ? (
-              Object.keys(details.schedule[0]).map((day) => (
+              Object.keys(details.schedule[0])
+              .sort((a, b) => daysOfWeek.indexOf(a) - daysOfWeek.indexOf(b))
+              .map((day) => (
                 <tr key={day}>
                   <td className={`text-3xl py-2 w-[55%] max-phone:w-[50%] max-phone:text-xl ${day === "Saturday" || day === "Sunday" ? "text-primary" : ""}`}>
                     <label>{day}</label>
